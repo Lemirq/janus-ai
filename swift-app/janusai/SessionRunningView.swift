@@ -11,40 +11,28 @@ import Combine
 
 final class StreamAudioPlayer: ObservableObject {
     @Published var samples: [Float] = Array(repeating: 0, count: 120)
-    private var audioEngine: AVAudioEngine?
-    private var playerNode = AVAudioPlayerNode()
     private var timer: Timer?
+    private var client = AudioStreamingClient()
+    private var sessionId: String = ""
 
-    func start() {
-        let engine = AVAudioEngine()
-        audioEngine = engine
-        engine.attach(playerNode)
-        let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!
-        engine.connect(playerNode, to: engine.mainMixerNode, format: format)
-
-        do {
-            try engine.start()
-            playerNode.play()
-        } catch { print("engine start error: \(error)") }
-
+    func start(sessionId: String) {
+        self.sessionId = sessionId
+        client.start(sessionId: sessionId)
         timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
             guard let self else { return }
-            // Placeholder: animate waveform until real levels from stream
             self.samples.removeFirst()
-            self.samples.append(Float.random(in: 0.05...0.9))
+            self.samples.append(self.client.rmsLevel)
         }
     }
 
     func stop() {
-        timer?.invalidate()
-        timer = nil
-        playerNode.stop()
-        audioEngine?.stop()
-        audioEngine = nil
+        timer?.invalidate(); timer = nil
+        client.stop()
     }
 }
 
 struct SessionRunningView: View {
+    let sessionId: String
     @StateObject private var player = StreamAudioPlayer()
 
     var body: some View {
@@ -63,14 +51,14 @@ struct SessionRunningView: View {
             HStack {
                 Button("Stop") { player.stop() }
                     .buttonStyle(.bordered)
-                Button("Start") { player.start() }
+                Button("Start") { player.start(sessionId: sessionId) }
                     .buttonStyle(.borderedProminent)
             }
         }
         .padding()
         .navigationTitle("Session Running")
         .interactiveDismissDisabled(true)
-        .onAppear { player.start() }
+        .onAppear { player.start(sessionId: sessionId) }
         .onDisappear { player.stop() }
     }
 }

@@ -10,9 +10,22 @@
 		579A9BC62EAC505800594794 /* janusai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = janusai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		578E750F2EAD572B00585794 /* Exceptions for "janusai" folder in "janusai" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 579A9BC52EAC505800594794 /* janusai */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		579A9BC82EAC505800594794 /* janusai */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				578E750F2EAD572B00585794 /* Exceptions for "janusai" folder in "janusai" target */,
+			);
 			path = janusai;
 			sourceTree = "<group>";
 		};
@@ -256,6 +269,7 @@
 				DEVELOPMENT_TEAM = TGJMXSQ3Q9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = janusai/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Voice Sample needed";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -289,6 +303,7 @@
 				DEVELOPMENT_TEAM = TGJMXSQ3Q9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = janusai/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Voice Sample needed";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
