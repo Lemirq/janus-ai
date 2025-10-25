@@ -1,0 +1,46 @@
+# Janus AI - Full Requirements (with workarounds for Windows)
+
+# Core dependencies
+openai>=1.0.0
+transformers>=4.35.0
+numpy>=1.24.0
+
+# Audio processing - librosa without optional dependencies
+librosa>=0.10.0 --no-deps
+soundfile>=0.12.0
+audioread>=3.0.0
+scipy>=1.9.0
+scikit-learn>=1.3.0 --no-deps
+joblib>=1.2.0
+threadpoolctl>=3.1.0
+
+# Data processing - pandas without optional dependencies  
+pandas>=2.0.0 --no-deps
+python-dateutil>=2.8.2
+pytz>=2023.3
+
+# PyTorch - CPU version for Windows (lighter, no CUDA issues)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.0.0
+
+# API and networking
+fastapi>=0.100.0
+uvicorn>=0.23.0
+websockets>=11.0
+aiohttp>=3.8.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+tqdm>=4.65.0
+
+# Fine-tuning specific
+datasets>=2.14.0
+accelerate>=0.24.0
+tensorboard>=2.14.0
+sentencepiece>=0.1.99
+
+# Audio processing alternatives for Windows
+# Instead of pyaudio (which also has C++ build issues):
+sounddevice>=0.4.6  # Better Windows support
+
