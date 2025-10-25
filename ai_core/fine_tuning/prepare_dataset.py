@@ -43,7 +43,7 @@ class ProsodyDataset(Dataset):
             <pitch_low>: 1000001,
             <emph>: 1000002,
             <pause_short>: 1000003, 
-            <pause_long: 1000004,
+            <pause_long>: 1000004,
             <pitch_rising>: 1000005,
             <pitch_falling>: 1000006
         }
