@@ -1,8 +1,8 @@
-# Mercury AI
+# Janus AI
 
 ## Objective
 
-Mercury makes speakers more persuasive. It finds answers to questions in real time, generates optimal responses, and guides the user in persuasive delivery. Mercury communicates with users via a bluetooth earpiece, monitoring conversations in real time and checking against predefined persuasion objectives to guide responses.
+Janus makes speakers more persuasive. It finds answers to questions in real time, generates optimal responses, and guides the user in persuasive delivery. Janus communicates with users via a bluetooth earpiece, monitoring conversations in real time and checking against predefined persuasion objectives to guide responses.
 
 ## Jargon
 
@@ -36,7 +36,7 @@ This means we need to modify the tokenizer, so that it assigns the right IDs to 
 ## Additional Features
 
 **Audience profiling**
-Allows the user to describe their audience, including factors like demographics, professional relations, interests, goals, and context. Mercury then analyzes this audience profile and adds key points to the Persuasion Objective. For example, certain kinds of appeals to authority, ethics, honour, etc. may be more effective in certain contexts and with specific audiences. By adding these guidelines to the PO, Mercury could improve targeting and efficacy.
+Allows the user to describe their audience, including factors like demographics, professional relations, interests, goals, and context. Janus then analyzes this audience profile and adds key points to the Persuasion Objective. For example, certain kinds of appeals to authority, ethics, honour, etc. may be more effective in certain contexts and with specific audiences. By adding these guidelines to the PO, Janus could improve targeting and efficacy.
 
 **Objective analytics**
 Tracks proximity to objective throughout use, and provides feedback after a session, including a graph of objective proximity. If the user came close to a goal but didn’t reach it, this should identify the key moment that led to failure, and vice versa.

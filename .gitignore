@@ -1,1 +1,5 @@
 /hackathon-msac-public/
+/venv/
+/ai_core/.venv/
+/ai_core/core/__pycache__/
+/ai_core/.env
