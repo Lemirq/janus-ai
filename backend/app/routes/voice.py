@@ -30,15 +30,13 @@ def upload_voice():
         duration = 0.0
 
     uid = str(uuid.uuid4())
-    orig_name = secure_filename(f"recording-{uid}.caf")
     filename = f"{uid}.caf"
     audio_path = os.path.join(UPLOAD_DIR, filename)
     audio.save(audio_path)
 
     # convert to wav and delete
     # Load the .caf file
-    audio = AudioSegment.from_file(filename, format="caf")
-
+    audio = AudioSegment.from_file(audio_path, format="caf")
     # Export as .wav
     audio.export(os.path.join(UPLOAD_DIR, f"recording-{uid}.wav"), format="wav")
 

@@ -16,19 +16,30 @@ struct SessionsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 12) {
-                HStack {
-                    Button("Go") { Task { await doQuery() } }
-                        .disabled(queryText.isEmpty || isLoading)
-                }
-                .padding(.horizontal)
+            
 
                 if !status.isEmpty { Text(status).font(.footnote).foregroundColor(.secondary) }
 
-                List(results, id: \.id) { item in
-                    VStack(alignment: .leading) {
-                        Text(item.text).font(.body)
-                        if let d = item.distance {
-                            Text(String(format: "Distance: %.3f", d)).font(.caption).foregroundColor(.secondary)
+                if results.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "tray")
+                            .font(.system(size: 40))
+                            .foregroundColor(.secondary)
+                        Text("No sessions yet")
+                            .font(.headline)
+                        Text("Tap the + button to create your first session.")
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    List(results, id: \.id) { item in
+                        VStack(alignment: .leading) {
+                            Text(item.text).font(.body)
+                            if let d = item.distance {
+                                Text(String(format: "Distance: %.3f", d)).font(.caption).foregroundColor(.secondary)
+                            }
                         }
                     }
                 }

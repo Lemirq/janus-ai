@@ -10,11 +10,13 @@ def create_app() -> Flask:
     from .routes.ingest import bp as ingest_bp
     from .routes.query import bp as query_bp
     from .routes.voice import bp as voice_bp
+    from .routes.sessions import bp as sessions_bp
 
     app.register_blueprint(health_bp, url_prefix="/api")
     app.register_blueprint(ingest_bp, url_prefix="/api")
     app.register_blueprint(query_bp, url_prefix="/api")
     app.register_blueprint(voice_bp, url_prefix="/api")
+    app.register_blueprint(sessions_bp, url_prefix="/api")
     return app
 
 

@@ -11,7 +11,7 @@ final class APIService {
     static let shared = APIService()
 
     // Update for production environments as needed
-    private let baseURL = "http://localhost:2025/api"
+    private let baseURL = "http://100.67.82.198:2025/api"
 
     private let jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -32,13 +32,14 @@ final class APIService {
     }
 
     // MARK: - Ingest
-    struct IngestResponse: Codable { let added: Int }
+    struct IngestResponse: Codable { let added: Int; let ids: [String]? }
 
-    func ingestDocuments(_ documents: [String], collection: String? = nil) async throws -> Int {
+    func ingestDocuments(_ documents: [String], collection: String? = nil, sessionId: String? = nil) async throws -> IngestResponse {
         guard let url = URL(string: "\(baseURL)/ingest") else { throw URLError(.badURL) }
 
         var body: [String: Any] = ["documents": documents]
         if let collection { body["collection"] = collection }
+        if let sessionId { body["sessionId"] = sessionId }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -47,7 +48,7 @@ final class APIService {
 
         let (data, _) = try await URLSession.shared.data(for: request)
         let response = try jsonDecoder.decode(IngestResponse.self, from: data)
-        return response.added
+        return response
     }
 
     // MARK: - Query
@@ -78,6 +79,33 @@ final class APIService {
 
 // MARK: - Voice Upload
 extension APIService {
+    // Sessions
+    struct Session: Codable { let id: String; let objective: String; let fileIds: [String]?; let status: String? }
+
+    func createSession(objective: String, fileIds: [String]) async throws -> Session {
+        guard let url = URL(string: "\(baseURL)/sessions") else { throw URLError(.badURL) }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body: [String: Any] = ["objective": objective, "fileIds": fileIds]
+        req.httpBody = try JSONSerialization.data(withJSONObject: body)
+        let (data, _) = try await URLSession.shared.data(for: req)
+        return try jsonDecoder.decode(Session.self, from: data)
+    }
+
+    func startSession(id: String) async throws {
+        guard let url = URL(string: "\(baseURL)/sessions/\(id)/start") else { throw URLError(.badURL) }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        _ = try await URLSession.shared.data(for: req)
+    }
+
+    func stopSession(id: String) async throws {
+        guard let url = URL(string: "\(baseURL)/sessions/\(id)/stop") else { throw URLError(.badURL) }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        _ = try await URLSession.shared.data(for: req)
+    }
     struct VoiceUploadResponse: Codable { let id: String; let wpm: Double?; let duration: Double; let words: Int }
 
     func uploadVoice(fileURL: URL, transcript: String, duration: TimeInterval) async throws -> VoiceUploadResponse {

@@ -14,6 +14,7 @@ struct NewSessionView: View {
     @State private var isSubmitting = false
     @State private var status: String = ""
     @State private var navigateToRun = false
+    @State private var createdSessionId: String?
 
     var body: some View {
         ScrollView {
@@ -79,17 +80,25 @@ struct NewSessionView: View {
         do {
             // Basic approach: send raw text chunks
             let texts = pickedDocs.map { $0.text }
-            let added = try await APIService.shared.ingestDocuments(texts)
-            status = "Ingested \(added) documents"
+            let resp = try await APIService.shared.ingestDocuments(texts)
+            status = "Ingested \(resp.added) documents"
         } catch {
             status = "Ingest failed: \(error.localizedDescription)"
         }
     }
 
     private func startSession() async {
-        // Placeholder: In a real app, call backend to create/start a session with objective + resources
-        // For now, simply navigate to running screen when we have at least an objective.
-        navigateToRun = true
+        isSubmitting = true
+        defer { isSubmitting = false }
+        do {
+            // For demo, we don't track exact fileIds from ingest; could be wired by capturing resp.ids
+            let session = try await APIService.shared.createSession(objective: objective, fileIds: [])
+            createdSessionId = session.id
+            try await APIService.shared.startSession(id: session.id)
+            navigateToRun = true
+        } catch {
+            status = "Start failed: \(error.localizedDescription)"
+        }
     }
 }
 

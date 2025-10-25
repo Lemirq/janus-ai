@@ -18,6 +18,7 @@ struct VoiceSetupView: View {
     @State private var audioPlayer: AVAudioPlayer?
 
     private let presetSentence = "The quick brown fox jumps over the lazy dog."
+    var onComplete: (() -> Void)? = nil
 
     // AV
     private let audioEngine = AVAudioEngine()
@@ -118,6 +119,7 @@ extension VoiceSetupView {
         do {
             let resp = try await APIService.shared.uploadVoice(fileURL: url, transcript: "", duration: duration)
             status = "Uploaded. Estimated WPM: \(resp.wpm ?? 0)"
+            onComplete?()
             dismiss()
         } catch {
             status = "Upload failed: \(error.localizedDescription)"
@@ -131,6 +133,12 @@ extension VoiceSetupView {
             return
         }
         do {
+            // Ensure playback routes to the bottom loudspeaker
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .duckOthers])
+            try session.overrideOutputAudioPort(.speaker)
+            try session.setActive(true)
+
             audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer?.prepareToPlay()
             audioPlayer?.play()
