@@ -137,14 +137,181 @@ class JanusAI:
         )
 
 
+async def simulate_conversation(janus: JanusAI, output_dir: str = "output_audio"):
+    """Simulate a sales conversation and generate audio responses"""
+    import wave
+    from pathlib import Path
+    
+    # Create output directory
+    Path(output_dir).mkdir(exist_ok=True)
+    print(f"\n[OUTPUT] Saving audio files to: {output_dir}/\n")
+    
+    # Simulated conversation: customer asking questions about a product/service
+    simulated_conversation = [
+        {
+            "speaker": "Customer",
+            "text": "I'm interested in your solution, but I'm concerned about the cost. What are we looking at price-wise?"
+        },
+        {
+            "speaker": "Customer", 
+            "text": "That sounds expensive. How long until we see ROI?"
+        },
+        {
+            "speaker": "Customer",
+            "text": "What about security? We've had data breaches before and our board is very sensitive about this."
+        },
+        {
+            "speaker": "Customer",
+            "text": "Interesting. Do you have case studies or references from similar companies?"
+        },
+        {
+            "speaker": "Customer",
+            "text": "Okay, I need to think about this and discuss with my team. When do we need to decide?"
+        }
+    ]
+    
+    print("Starting simulated sales conversation...\n")
+    print("=" * 70)
+    
+    for i, exchange in enumerate(simulated_conversation, 1):
+        print(f"\n[{exchange['speaker']}]: \"{exchange['text']}\"")
+        print("-" * 70)
+        
+        # Simulate sentiment analysis (in real version, this would analyze audio)
+        from core.sentiment_analyzer import ConversationAnalysis
+        
+        # Create mock analysis
+        is_question = "?" in exchange['text']
+        concerns = []
+        if "cost" in exchange['text'].lower() or "expensive" in exchange['text'].lower():
+            concerns.append("pricing")
+        if "security" in exchange['text'].lower() or "breach" in exchange['text'].lower():
+            concerns.append("security")
+        if "time" in exchange['text'].lower() or "roi" in exchange['text'].lower():
+            concerns.append("timeline")
+            
+        analysis = ConversationAnalysis(
+            sentiment="questioning" if is_question else "interested",
+            is_question=is_question,
+            question_type="objection" if concerns else "clarification",
+            detected_concerns=concerns,
+            emotional_state="skeptical" if concerns else "engaged",
+            requires_response=True,
+            is_complex_question=len(concerns) > 0,
+            key_topics=concerns
+        )
+        
+        # Check alignment with persuasion objective
+        alignment = await janus.persuasion_engine.check_alignment(
+            exchange['text'],
+            analysis,
+            janus.current_objective
+        )
+        
+        print(f"[ANALYSIS] Sentiment: {analysis.sentiment} | Concerns: {', '.join(concerns) if concerns else 'None'}")
+        print(f"[STRATEGY] Alignment Score: {alignment.alignment_score:.2f} | Next Action: {alignment.next_best_action}")
+        
+        # Generate response
+        print(f"[AI] Generating persuasive response...")
+        response = await janus.response_generator.generate(
+            transcript=exchange['text'],
+            analysis=analysis,
+            alignment=alignment,
+            objective=janus.current_objective,
+            history=janus.conversation_history
+        )
+        
+        print(f"[RESPONSE] Text: \"{response.text}\"")
+        print(f"[PROSODY] With markup: \"{response.prosody_text}\"")
+        print(f"[TACTICS] Used: {', '.join(response.persuasion_tactics)}")
+        
+        # Generate audio
+        print(f"[AUDIO] Generating speech with prosody...")
+        audio_data = await janus.audio_generator.generate(
+            response.prosody_text,  # Use prosody-marked text
+            response.prosody_tokens,
+            response.voice_profile
+        )
+        
+        # Save audio file
+        filename = f"{output_dir}/response_{i:02d}.wav"
+        await janus.audio_generator.save_to_file(audio_data, filename)
+        print(f"[SAVED] Audio file: {filename}")
+        
+        # Update conversation history
+        janus.conversation_history.append({
+            'user': exchange['text'],
+            'assistant': response.text,
+            'analysis': analysis,
+            'alignment': alignment
+        })
+        
+        print("=" * 70)
+    
+    # Generate session analytics
+    print("\n\n" + "=" * 70)
+    print("SESSION ANALYTICS")
+    print("=" * 70)
+    analytics = await janus.get_session_analytics()
+    
+    print(f"\nObjective Completion: {analytics['objective_completion']:.1%}")
+    print(f"Average Alignment: {analytics['average_alignment']:.2f}")
+    print(f"\nAddressed Points:")
+    for point in analytics['addressed_points']:
+        print(f"   - {point}")
+    print(f"\nRemaining Points:")
+    for point in analytics['remaining_points']:
+        print(f"   - {point}")
+    print(f"\nKey Moments: {len(analytics['key_moments'])}")
+    for moment in analytics['key_moments'][:3]:  # Show first 3
+        print(f"   - {moment['type']}: {moment['description']}")
+    
+    print("\n" + "=" * 70)
+    print(f"Conversation complete! Audio files saved to: {output_dir}/")
+    print("=" * 70)
+
+
 async def main():
-    """Example usage of Janus AI"""
+    """Example usage of Janus AI with actual audio generation"""
+    import argparse
+    
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Janus AI - Real-time Persuasion Assistant")
+    parser.add_argument('--mode', choices=['demo', 'live'], default='demo',
+                       help='Demo mode (simulated conversation) or live mode (real audio)')
+    parser.add_argument('--output-dir', type=str, default='output_audio',
+                       help='Directory to save audio files (default: output_audio)')
+    parser.add_argument('--scenario', type=str, 
+                       choices=['sales', 'negotiation', 'interview'],
+                       default='sales',
+                       help='Conversation scenario type')
+    args = parser.parse_args()
+    
+    print("\n" + "="*70)
+    print("JANUS AI - Real-time Persuasion Assistant")
+    print("="*70)
+    
+    # Initialize configuration
+    api_key = os.getenv("BOSON_API_KEY")
+    if not api_key:
+        print("\n[ERROR] BOSON_API_KEY environment variable not set")
+        print("Set it with: $env:BOSON_API_KEY=\"your-key\"")
+        return
+    
     config = JanusConfig(
-        api_key=os.getenv("BOSON_API_KEY"),
+        api_key=api_key,
         enable_smooth_stall=True,
         enable_question_prediction=True
     )
     
+    print(f"\n[CONFIG] Configuration:")
+    print(f"   - Mode: {args.mode}")
+    print(f"   - Scenario: {args.scenario}")
+    print(f"   - Output: {args.output_dir}")
+    print(f"   - Models: {config.generation_model}, {config.reasoning_model}")
+    
+    # Initialize Janus AI
+    print(f"\n[INIT] Initializing Janus AI components...")
     janus = JanusAI(config)
     
     # Set persuasion objective
@@ -160,6 +327,7 @@ async def main():
     )
     
     await janus.set_persuasion_objective(objective)
+    print(f"[OBJECTIVE] Goal: {objective.main_goal}")
     
     # Set audience profile
     audience = {
@@ -170,10 +338,15 @@ async def main():
     }
     
     await janus.set_audience_profile(audience)
+    print(f"[AUDIENCE] Type: {audience['type']}")
     
-    # In production, this would connect to actual audio stream
-    # For now, we'll simulate
-    print("Janus AI initialized and ready for persuasion assistance")
+    if args.mode == 'demo':
+        # Run simulated conversation
+        await simulate_conversation(janus, args.output_dir)
+    else:
+        # Live mode (not implemented yet)
+        print("\n[WARNING] Live mode not implemented yet. Use --mode demo for now.")
+        print("Live mode would require audio device integration.")
 
 
 if __name__ == "__main__":
