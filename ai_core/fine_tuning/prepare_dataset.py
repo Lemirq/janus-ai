@@ -37,19 +37,15 @@ class ProsodyDataset(Dataset):
         self.max_length = max_length
         
         # Initialize prosody token mapping
-        self.prosody_token_offset = 128000
+        self.prosody_token_offset = 1000000
         self.prosody_markers = {
-            "<EMPH>": 128000,
-            "<STRONG>": 128001,
-            "<SLOW>": 128003,
-            "<FAST>": 128004,
-            "<PAUSE_SHORT>": 128005,
-            "<PAUSE_LONG>": 128006,
-            "<PITCH_HIGH>": 128007,
-            "<PITCH_LOW>": 128008,
-            "<CONFIDENT>": 128011,
-            "<FRIENDLY>": 128012,
-            "<CALM>": 128015
+            <pitch_high>: 1000000,
+            <pitch_low>: 1000001,
+            <emph>: 1000002,
+            <pause_short>: 1000003, 
+            <pause_long: 1000004,
+            <pitch_rising>: 1000005,
+            <pitch_falling>: 1000006
         }
         
     def __len__(self):
