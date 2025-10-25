@@ -54,9 +54,16 @@ class ProsodyTokenizer:
         "<RESET>": ProsodyToken("reset", 128016, "Reset to normal", "<RESET>")
     }
     
-    def __init__(self, base_model_name: str = "meta-llama/Llama-3.2-3B"):
+    def __init__(self, base_model_name: str = "gpt2"):
         """Initialize with base tokenizer"""
-        self.base_tokenizer = AutoTokenizer.from_pretrained(base_model_name)
+        # Use GPT-2 tokenizer instead of gated Llama model
+        # For production, you can use the actual model tokenizer once authenticated
+        try:
+            self.base_tokenizer = AutoTokenizer.from_pretrained(base_model_name)
+        except Exception as e:
+            print(f"Warning: Could not load tokenizer {base_model_name}, using simple fallback")
+            self.base_tokenizer = None
+        
         self.prosody_pattern = re.compile(r'(<[A-Z_]+>)')
         
         # Create reverse lookup
@@ -78,9 +85,14 @@ class ProsodyTokenizer:
                 # This is a prosody token
                 encoded_tokens.append(self.token_to_id[part])
             elif part:  # Non-empty text
-                # Use base tokenizer for regular text
-                text_tokens = self.base_tokenizer.encode(part, add_special_tokens=False)
-                encoded_tokens.extend(text_tokens)
+                if self.base_tokenizer:
+                    # Use base tokenizer for regular text
+                    text_tokens = self.base_tokenizer.encode(part, add_special_tokens=False)
+                    encoded_tokens.extend(text_tokens)
+                else:
+                    # Fallback: simple word-based tokenization
+                    # This is just for demo - production would use proper tokenizer
+                    encoded_tokens.extend([hash(word) % 100000 for word in part.split()])
                 
         return encoded_tokens
         
@@ -95,7 +107,10 @@ class ProsodyTokenizer:
             if token_id >= 128000 and token_id in self.id_to_token:
                 # First decode any accumulated regular tokens
                 if regular_tokens:
-                    result.append(self.base_tokenizer.decode(regular_tokens))
+                    if self.base_tokenizer:
+                        result.append(self.base_tokenizer.decode(regular_tokens))
+                    else:
+                        result.append(" [tokens] ")
                     regular_tokens = []
                 # Add prosody token
                 result.append(self.id_to_token[token_id])
@@ -105,7 +120,10 @@ class ProsodyTokenizer:
                 
         # Decode any remaining regular tokens
         if regular_tokens:
-            result.append(self.base_tokenizer.decode(regular_tokens))
+            if self.base_tokenizer:
+                result.append(self.base_tokenizer.decode(regular_tokens))
+            else:
+                result.append(" [tokens] ")
             
         return ''.join(result)
         
