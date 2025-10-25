@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct SessionsView: View {
     @State private var queryText: String = ""
     @State private var results: [APIService.QueryResult] = []

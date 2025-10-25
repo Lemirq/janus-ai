@@ -50,7 +50,7 @@ struct NewSessionView: View {
 
                 Divider()
 
-                NavigationLink(destination: SessionRunningView(), isActive: $navigateToRun) { EmptyView() }
+                NavigationLink(destination: SessionRunningView(sessionId: createdSessionId ?? ""), isActive: $navigateToRun) { EmptyView() }
                     .hidden()
                 Button("Start Session") {
                     Task { await startSession() }

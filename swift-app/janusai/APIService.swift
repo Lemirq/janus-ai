@@ -140,4 +140,20 @@ extension APIService {
         let (data, _) = try await URLSession.shared.upload(for: request, from: body)
         return try jsonDecoder.decode(VoiceUploadResponse.self, from: data)
     }
+
+    // MARK: - WebSocket URL helper
+    func webSocketURL(sessionId: String) -> URL? {
+        // Convert http(s) base to ws(s) and strip trailing /api
+        var root = baseURL
+        if let range = root.range(of: "/api", options: [.backwards]) {
+            root.removeSubrange(range)
+        }
+        let wsBase: String
+        if root.hasPrefix("https://") {
+            wsBase = root.replacingOccurrences(of: "https://", with: "wss://")
+        } else {
+            wsBase = root.replacingOccurrences(of: "http://", with: "ws://")
+        }
+        return URL(string: "\(wsBase)/ws/sessions/\(sessionId)")
+    }
 }
