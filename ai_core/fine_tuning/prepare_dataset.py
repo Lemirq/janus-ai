@@ -39,17 +39,16 @@ class ProsodyDataset(Dataset):
         # Initialize prosody token mapping
         self.prosody_token_offset = 128000
         self.prosody_markers = {
-            "<EMPH>": 128000,
-            "<STRONG>": 128001,
-            "<SLOW>": 128003,
-            "<FAST>": 128004,
-            "<PAUSE_SHORT>": 128005,
-            "<PAUSE_LONG>": 128006,
-            "<PITCH_HIGH>": 128007,
-            "<PITCH_LOW>": 128008,
-            "<CONFIDENT>": 128011,
-            "<FRIENDLY>": 128012,
-            "<CALM>": 128015
+            "<pitch_high>": 1000000
+            "<pitch_low>": 1000001
+            "<rate_fast>": 1000002	
+            "<rate_slow>": 1000003
+            "<volume_high>": 1000004
+            "<volume_low>": 1000005
+            "<emph>": 1000006
+            "<breath>": 1000007
+            "<pause_short>": 1000008
+            "<pause_long>": 1000009
         }
         
     def __len__(self):
