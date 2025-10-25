@@ -38,6 +38,18 @@ class ProsodyDataset(Dataset):
         
         # Initialize prosody token mapping
         self.prosody_token_offset = 128000
+        """
+        <pitch_high>
+        <pitch_low>
+        <rate_fast>	
+        <rate_slow>
+        <volume_high>
+        <volume_low>
+        <emph>
+        <breath>
+        <pause_short>
+        <pause_long>
+        """
         self.prosody_markers = {
             "<EMPH>": 128000,
             "<STRONG>": 128001,
