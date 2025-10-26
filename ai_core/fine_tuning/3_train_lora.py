@@ -107,6 +107,16 @@ def setup_lora_model(model_name="gpt2", lora_r=16, lora_alpha=32):
     print(f"      New vocab size: {len(tokenizer)}")
     
     print(f"[4/5] Configuring LoRA")
+    
+    # Check if GPU is available
+    import torch
+    if torch.cuda.is_available():
+        print(f"       GPU detected: {torch.cuda.get_device_name(0)}")
+        print(f"       VRAM available: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
+    else:
+        print(f"       WARNING: No GPU detected! Training will be slow.")
+        print(f"       Install GPU PyTorch: pip install -r requirements.txt")
+    
     lora_config = LoraConfig(
         task_type=TaskType.CAUSAL_LM,
         r=lora_r,
@@ -221,10 +231,11 @@ def train(epochs=3, batch_size=4, lora_r=16, test_mode=False, output_dir="models
         eval_strategy="steps",  # Changed from evaluation_strategy (newer transformers)
         save_strategy="steps",
         load_best_model_at_end=True,
-        fp16=False,  # Disable mixed precision for compatibility
-        gradient_checkpointing=False,  # Disable for now to avoid gradient issues
+        fp16=torch.cuda.is_available(),  # Use FP16 if GPU available
+        gradient_checkpointing=False,  # Disable to avoid gradient issues
         logging_dir=f"{output_dir}/logs",
-        report_to=[],  # Disable tensorboard for test
+        report_to=["tensorboard"] if torch.cuda.is_available() else [],
+        use_cpu=(not torch.cuda.is_available()),  # Explicitly use CPU if no GPU
     )
     
     # Calculate total steps for progress

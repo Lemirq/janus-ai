@@ -14,7 +14,6 @@ backend/uploads/
 # Training outputs and checkpoints (TOO LARGE FOR GITHUB)
 ai_core/fine_tuning/models/
 ai_core/fine_tuning/training_data/
-ai_core/output/
 ai_core/demo_output/
 ai_core/output_audio/
 

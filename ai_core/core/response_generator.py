@@ -205,6 +205,12 @@ RESPONSE: speak directly as if you were the user:"""
                 # Clean up
                 result = result.replace(self.local_tokenizer.eos_token, '').strip()
                 
+                # Add space after prosody tokens for better readability
+                prosody_tokens = ['<emph>', '<pause_short>', '<pause_long>', '<pitch_high>', 
+                                '<pitch_low>', '<pitch_rising>', '<pitch_falling>']
+                for token in prosody_tokens:
+                    result = result.replace(token, f'{token} ')
+                
                 if result and len(result) > 10:
                     print("[LOCAL MODEL] Using fine-tuned response (85% prosody)")
                     return result
