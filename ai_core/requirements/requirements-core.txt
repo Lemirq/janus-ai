@@ -1,0 +1,17 @@
+# Janus AI - Core Requirements (No MySQL issues)
+
+# Essential AI/ML
+openai>=1.0.0
+transformers>=4.35.0
+numpy>=1.24.0
+
+# Audio processing (core)
+soundfile>=0.12.0
+
+# API and networking
+aiohttp>=3.8.0
+python-dotenv>=1.0.0
+
+# Async support
+asyncio-mqtt>=0.16.0; python_version >= "3.8"
+

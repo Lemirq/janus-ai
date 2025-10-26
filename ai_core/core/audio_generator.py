@@ -164,17 +164,14 @@ class AudioGenerator:
         
         # System prompt explaining prosody handling
         system_prompt = """You are an AI assistant that converts text to speech with prosody control.
-When you see special prosody markers like <EMPH>, <SLOW>, <PAUSE>, apply the corresponding speech effects:
-- <EMPH>: Emphasize the following word
-- <STRONG>: Strong emphasis with increased volume
-- <SLOW>: Slow down speech rate
-- <FAST>: Speed up speech rate
-- <PAUSE_SHORT>: Brief pause (0.5s)
-- <PAUSE_LONG>: Longer pause (1.5s)
-- <PITCH_HIGH>: Higher pitch
-- <PITCH_LOW>: Lower pitch
-- <CONFIDENT>: Confident, authoritative tone
-- <FRIENDLY>: Warm, friendly tone
+When you see special prosody markers like <emph>, <pitch_high>, <pause_short>, apply the corresponding speech effects:
+- <emph>: Emphasize the following word
+- <pause_short>: Brief pause (0.5s)
+- <pause_long>: Longer pause (1.5s)
+- <pitch_high>: Higher pitch
+- <pitch_low>: Lower pitch
+- <pitch_rising>: Rising intonation
+- <pitch_falling>: Falling intonation
 
 <|scene_desc_start|>
 Professional setting, clear audio quality.

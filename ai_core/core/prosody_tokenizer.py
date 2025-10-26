@@ -21,42 +21,35 @@ class ProsodyToken:
 class ProsodyTokenizer:
     """
     Custom tokenizer that handles prosody tokens for Higgs model.
-    Prosody tokens have IDs >= 128,000 to be passed to audio stream.
+    Prosody tokens have IDs >= 5,000,000 to avoid collisions with other token IDs.
     """
     
-    # Define prosody tokens with IDs >= 128,000
+    # Define prosody tokens with IDs >= 5,000,000
     PROSODY_TOKENS = {
-        # Emphasis and stress
-        "<EMPH>": ProsodyToken("emphasis", 128000, "Emphasize next word", "<EMPH>"),
-        "<STRONG>": ProsodyToken("strong", 128001, "Strong emphasis", "<STRONG>"),
-        "<SOFT>": ProsodyToken("soft", 128002, "Soft delivery", "<SOFT>"),
-        
-        # Pace control
-        "<SLOW>": ProsodyToken("slow", 128003, "Slow down pace", "<SLOW>"),
-        "<FAST>": ProsodyToken("fast", 128004, "Speed up pace", "<FAST>"),
-        "<PAUSE_SHORT>": ProsodyToken("pause_short", 128005, "Short pause", "<PAUSE_SHORT>"),
-        "<PAUSE_LONG>": ProsodyToken("pause_long", 128006, "Long pause", "<PAUSE_LONG>"),
+        # Emphasis
+        "<emph>": ProsodyToken("emphasis", 5000000, "Emphasize next word", "<emph>"),
+
+        # Pause control
+        "<pause_short>": ProsodyToken("pause_short", 5000001, "Short pause", "<pause_short>"),
+        "<pause_long>": ProsodyToken("pause_long", 5000002, "Long pause", "<pause_long>"),
         
         # Pitch control
-        "<PITCH_HIGH>": ProsodyToken("pitch_high", 128007, "Higher pitch", "<PITCH_HIGH>"),
-        "<PITCH_LOW>": ProsodyToken("pitch_low", 128008, "Lower pitch", "<PITCH_LOW>"),
-        "<PITCH_RISE>": ProsodyToken("pitch_rise", 128009, "Rising intonation", "<PITCH_RISE>"),
-        "<PITCH_FALL>": ProsodyToken("pitch_fall", 128010, "Falling intonation", "<PITCH_FALL>"),
-        
-        # Emotion and tone
-        "<CONFIDENT>": ProsodyToken("confident", 128011, "Confident tone", "<CONFIDENT>"),
-        "<FRIENDLY>": ProsodyToken("friendly", 128012, "Friendly tone", "<FRIENDLY>"),
-        "<SERIOUS>": ProsodyToken("serious", 128013, "Serious tone", "<SERIOUS>"),
-        "<EXCITED>": ProsodyToken("excited", 128014, "Excited tone", "<EXCITED>"),
-        "<CALM>": ProsodyToken("calm", 128015, "Calm tone", "<CALM>"),
-        
-        # Reset
-        "<RESET>": ProsodyToken("reset", 128016, "Reset to normal", "<RESET>")
+        "<pitch_high>": ProsodyToken("pitch_high", 5000003, "Higher pitch", "<pitch_high>"),
+        "<pitch_low>": ProsodyToken("pitch_low", 5000004, "Lower pitch", "<pitch_low>"),
+        "<pitch_rising>": ProsodyToken("pitch_rising", 5000005, "Rising intonation", "<pitch_rising>"),
+        "<pitch_falling>": ProsodyToken("pitch_falling", 5000006, "Falling intonation", "<pitch_falling>"),
     }
     
-    def __init__(self, base_model_name: str = "meta-llama/Llama-3.2-3B"):
+    def __init__(self, base_model_name: str = "gpt2"):
         """Initialize with base tokenizer"""
-        self.base_tokenizer = AutoTokenizer.from_pretrained(base_model_name)
+        # Use GPT-2 tokenizer instead of gated Llama model
+        # For production, you can use the actual model tokenizer once authenticated
+        try:
+            self.base_tokenizer = AutoTokenizer.from_pretrained(base_model_name)
+        except Exception as e:
+            print(f"Warning: Could not load tokenizer {base_model_name}, using simple fallback")
+            self.base_tokenizer = None
+        
         self.prosody_pattern = re.compile(r'(<[A-Z_]+>)')
         
         # Create reverse lookup
@@ -78,9 +71,14 @@ class ProsodyTokenizer:
                 # This is a prosody token
                 encoded_tokens.append(self.token_to_id[part])
             elif part:  # Non-empty text
-                # Use base tokenizer for regular text
-                text_tokens = self.base_tokenizer.encode(part, add_special_tokens=False)
-                encoded_tokens.extend(text_tokens)
+                if self.base_tokenizer:
+                    # Use base tokenizer for regular text
+                    text_tokens = self.base_tokenizer.encode(part, add_special_tokens=False)
+                    encoded_tokens.extend(text_tokens)
+                else:
+                    # Fallback: simple word-based tokenization
+                    # This is just for demo - production would use proper tokenizer
+                    encoded_tokens.extend([hash(word) % 100000 for word in part.split()])
                 
         return encoded_tokens
         
@@ -92,10 +90,13 @@ class ProsodyTokenizer:
         regular_tokens = []
         
         for token_id in token_ids:
-            if token_id >= 128000 and token_id in self.id_to_token:
+            if token_id >= 5000000 and token_id in self.id_to_token:
                 # First decode any accumulated regular tokens
                 if regular_tokens:
-                    result.append(self.base_tokenizer.decode(regular_tokens))
+                    if self.base_tokenizer:
+                        result.append(self.base_tokenizer.decode(regular_tokens))
+                    else:
+                        result.append(" [tokens] ")
                     regular_tokens = []
                 # Add prosody token
                 result.append(self.id_to_token[token_id])
@@ -105,14 +106,20 @@ class ProsodyTokenizer:
                 
         # Decode any remaining regular tokens
         if regular_tokens:
-            result.append(self.base_tokenizer.decode(regular_tokens))
+            if self.base_tokenizer:
+                result.append(self.base_tokenizer.decode(regular_tokens))
+            else:
+                result.append(" [tokens] ")
             
         return ''.join(result)
         
-    def apply_prosody_rules(self, text: str, sentiment: str, context: Dict) -> str:
+    def apply_prosody_rules(self, text: str, context: Dict = None) -> str:
         """
         Apply intelligent prosody based on content and context.
         """
+        if context is None:
+            context = {}
+            
         # Start with original text
         prosody_text = text
         
@@ -122,37 +129,17 @@ class ProsodyTokenizer:
                 if point.lower() in text.lower():
                     # Find and emphasize the key point
                     pattern = re.compile(re.escape(point), re.IGNORECASE)
-                    prosody_text = pattern.sub(f"<EMPH>{point}", prosody_text, count=1)
-                    
-        # Apply tone based on sentiment
-        tone_mapping = {
-            'positive': '<FRIENDLY>',
-            'confident': '<CONFIDENT>',
-            'serious': '<SERIOUS>',
-            'excited': '<EXCITED>',
-            'calm': '<CALM>'
-        }
-        
-        if sentiment in tone_mapping:
-            prosody_text = f"{tone_mapping[sentiment]} {prosody_text}"
+                    prosody_text = pattern.sub(f"<emph>{point}", prosody_text, count=1)
             
-        # Add strategic pauses
-        # Before important points
-        prosody_text = re.sub(r'(\. )([A-Z])', r'\1<PAUSE_SHORT> \2', prosody_text)
+        # Add strategic pauses before important points
+        prosody_text = re.sub(r'(\. )([A-Z])', r'\1<pause_short> \2', prosody_text)
         
         # Before numbers/statistics (persuasive emphasis)
-        prosody_text = re.sub(r'(\s)(\d+%|\$\d+|\d+ percent)', r'\1<PAUSE_SHORT> <EMPH>\2', prosody_text)
+        prosody_text = re.sub(r'(\s)(\d+%|\$\d+|\d+ percent)', r'\1<emph>\2', prosody_text)
         
         # Question intonation
         if '?' in text:
-            prosody_text = re.sub(r'(\?)', r'<PITCH_RISE>\1', prosody_text)
-            
-        # Confidence boosters
-        confidence_phrases = ['guarantee', 'proven', 'definitely', 'certainly', 'absolutely']
-        for phrase in confidence_phrases:
-            if phrase in text.lower():
-                pattern = re.compile(f'\\b{phrase}\\b', re.IGNORECASE)
-                prosody_text = pattern.sub(f'<STRONG>{phrase}', prosody_text)
+            prosody_text = re.sub(r'([^?]+)(\?)', r'\1<pitch_rising>\2', prosody_text)
                 
         return prosody_text
         
@@ -171,9 +158,8 @@ class ProsodyTokenizer:
                 current_prosody = part
             elif part:  # Non-empty text
                 sequence.append((part, current_prosody))
-                # Reset prosody after applying (unless it's a tone setting)
-                if current_prosody and current_prosody not in ['<FRIENDLY>', '<CONFIDENT>', '<SERIOUS>', '<CALM>']:
-                    current_prosody = None
+                # Reset prosody after applying (all are one-time effects now)
+                current_prosody = None
                     
         return sequence
         
@@ -198,36 +184,30 @@ class ProsodyStrategy:
         
         prosody_text = text
         
-        # Opening - establish authority and friendliness
-        if persuasion_context.get('is_opening', False):
-            prosody_text = f"<FRIENDLY> <CONFIDENT> {prosody_text}"
-            
-        # Handling objections - calm and confident
+        # Handling objections - pause before response
         if persuasion_context.get('is_objection_response', False):
-            prosody_text = f"<CALM> <PAUSE_SHORT> {prosody_text}"
+            prosody_text = f"<pause_short> {prosody_text}"
             # Emphasize understanding
-            prosody_text = prosody_text.replace("understand", "<EMPH>understand")
+            if "understand" in prosody_text.lower():
+                prosody_text = re.sub(r'\bunderstand\b', '<emph>understand', prosody_text, flags=re.IGNORECASE)
             
-        # Call to action - energy and urgency
+        # Call to action - emphasize action words
         if persuasion_context.get('is_call_to_action', False):
-            prosody_text = f"<EXCITED> {prosody_text}"
-            # Emphasize action words
             action_words = ['now', 'today', 'immediately', 'act', 'decide', 'choose']
             for word in action_words:
                 if word in prosody_text.lower():
                     pattern = re.compile(f'\\b{word}\\b', re.IGNORECASE)
-                    prosody_text = pattern.sub(f'<STRONG>{word}', prosody_text)
+                    prosody_text = pattern.sub(f'<emph>{word}', prosody_text, count=1)
                     
-        # Statistics and evidence - slow down and emphasize
+        # Statistics and evidence - emphasize numbers
         stat_pattern = r'(\d+%|\$[\d,]+|\d+ out of \d+)'
-        prosody_text = re.sub(stat_pattern, r'<SLOW> <EMPH>\1<RESET>', prosody_text)
+        prosody_text = re.sub(stat_pattern, r'<emph>\1', prosody_text)
         
-        # Benefits - positive and uplifting
+        # Benefits - emphasize with rising pitch
         benefit_keywords = ['benefit', 'advantage', 'improve', 'increase', 'save', 'gain']
         for keyword in benefit_keywords:
             if keyword in prosody_text.lower():
-                # Add positive tone before benefits
                 pattern = re.compile(f'(\\b{keyword})', re.IGNORECASE)
-                prosody_text = pattern.sub(r'<PITCH_RISE>\1', prosody_text)
+                prosody_text = pattern.sub(r'<pitch_rising>\1', prosody_text, count=1)
                 
         return prosody_text
