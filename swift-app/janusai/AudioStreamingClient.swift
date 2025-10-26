@@ -249,11 +249,19 @@ final class AudioStreamingClient: NSObject, ObservableObject {
             return
         }
         
+        // Prepend timestamp (milliseconds since epoch as Int64)
+        let timestampMs = Int64(Date().timeIntervalSince1970 * 1000)
+        var packetData = Data()
+        withUnsafeBytes(of: timestampMs.littleEndian) { bytes in
+            packetData.append(contentsOf: bytes)
+        }
+        packetData.append(data)
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
         
-        let task = urlSession.uploadTask(with: request, from: data) { data, response, error in
+        let task = urlSession.uploadTask(with: request, from: packetData) { data, response, error in
             if let error = error {
                 print("❌ Upload error: \(error.localizedDescription)")
                 completion(false)

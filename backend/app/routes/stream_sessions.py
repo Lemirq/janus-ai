@@ -3,6 +3,9 @@ import os
 import time
 import wave
 import io
+import struct
+import numpy as np
+import sounddevice as sd
 from datetime import datetime
 from flask import Blueprint, Response, request, stream_with_context
 from collections import deque
@@ -18,8 +21,14 @@ _session_states = {}  # Track session streaming state
 # Track upload counts per session for logging
 _upload_counts = {}
 
-# Track WAV file handles for recording
-_session_wav_files = {}
+# Track packet directories for each session
+_session_packet_dirs = {}
+
+# Track audio output streams for playback
+_session_audio_streams = {}
+
+# Track latency statistics per session
+_latency_stats = {}  # {session_id: {'min': ms, 'max': ms, 'sum': ms, 'count': n}}
 
 @bp.route('/sessions/<session_id>/upload_audio', methods=['POST'])
 def upload_audio_chunk(session_id):
@@ -31,31 +40,53 @@ def upload_audio_chunk(session_id):
     if not os.path.exists(_session_path(session_id)):
         return {"error": "session not found"}, 404
     
-    # Get raw PCM16 data from request body
-    pcm_data = request.get_data()
+    # Get raw data from request body (timestamp + PCM16 data)
+    raw_data = request.get_data()
+    
+    if len(raw_data) < 8:
+        return {"error": "invalid packet: too small"}, 400
+    
+    # Extract timestamp (first 8 bytes, Int64 little-endian, milliseconds)
+    timestamp_ms = struct.unpack('<q', raw_data[:8])[0]
+    
+    # Calculate latency
+    current_time_ms = int(time.time() * 1000)
+    latency_ms = current_time_ms - timestamp_ms
+    
+    # Extract PCM audio data (remaining bytes)
+    pcm_data = raw_data[8:]
     
     if len(pcm_data) == 0:
         return {"error": "empty audio data"}, 400
     
-    # Initialize buffer and WAV file for this session if needed
+    # Initialize buffer and packet directory for this session if needed
     if session_id not in _session_audio_buffers:
         _session_audio_buffers[session_id] = deque(maxlen=200)  # Keep last ~4 seconds at 50 chunks/sec
         _upload_counts[session_id] = 0
+        _latency_stats[session_id] = {'min': float('inf'), 'max': 0, 'sum': 0, 'count': 0}
         
-        # Create uploads directory if it doesn't exist
+        # Create packets directory for this session
         uploads_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'uploads')
-        os.makedirs(uploads_dir, exist_ok=True)
-        
-        # Create WAV file for this session
         timestamp = datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')
-        wav_filename = os.path.join(uploads_dir, f'recording-{session_id}-{timestamp}.wav')
-        wav_file = wave.open(wav_filename, 'wb')
-        wav_file.setnchannels(1)  # Mono
-        wav_file.setsampwidth(2)  # 16-bit = 2 bytes
-        wav_file.setframerate(16000)  # 16 kHz
-        _session_wav_files[session_id] = wav_file
+        packet_dir = os.path.join(uploads_dir, f'packets-{session_id}-{timestamp}')
+        os.makedirs(packet_dir, exist_ok=True)
+        _session_packet_dirs[session_id] = packet_dir
         
-        print(f"[stream_sessions] Created recording file: {wav_filename}")
+        print(f"[stream_sessions] Created packet directory: {packet_dir}")
+        
+        # Initialize audio output stream for playback through speakers
+        try:
+            audio_stream = sd.OutputStream(
+                samplerate=16000,
+                channels=1,
+                dtype='int16',
+                blocksize=0  # Use variable block size
+            )
+            audio_stream.start()
+            _session_audio_streams[session_id] = audio_stream
+            print(f"[stream_sessions] Started audio playback stream for {session_id}")
+        except Exception as e:
+            print(f"[stream_sessions] Error starting audio playback: {e}")
     
     # Increment upload count
     _upload_counts[session_id] += 1
@@ -64,19 +95,48 @@ def upload_audio_chunk(session_id):
     # Add to buffer
     _session_audio_buffers[session_id].append(pcm_data)
     
-    # Log first few and periodic chunks
+    # Update latency statistics
+    stats = _latency_stats[session_id]
+    stats['min'] = min(stats['min'], latency_ms)
+    stats['max'] = max(stats['max'], latency_ms)
+    stats['sum'] += latency_ms
+    stats['count'] += 1
+    avg_latency = stats['sum'] / stats['count']
+    
+    # Log first few and periodic chunks with latency
     if count <= 3 or count % 50 == 0:
         bytes_preview = " ".join(f"{b:02x}" for b in pcm_data[:16])
-        print(f"[stream_sessions] Received chunk #{count} for {session_id}: {len(pcm_data)} bytes, first 16: {bytes_preview}")
+        print(f"[stream_sessions] Chunk #{count} | LATENCY: {latency_ms}ms (avg: {avg_latency:.1f}ms, min: {stats['min']}ms, max: {stats['max']}ms) | {len(pcm_data)} bytes")
     
-    # Write to WAV file
+    # Save packet to individual file
+    packet_filename = None
     try:
-        if session_id in _session_wav_files:
-            _session_wav_files[session_id].writeframes(pcm_data)
+        if session_id in _session_packet_dirs:
+            packet_filename = os.path.join(
+                _session_packet_dirs[session_id],
+                f'packet_{count:06d}_latency{latency_ms}ms_ts{timestamp_ms}.pcm'
+            )
+            with open(packet_filename, 'wb') as f:
+                f.write(pcm_data)
             if count <= 3 or count % 50 == 0:
-                print(f"[stream_sessions] Wrote chunk #{count} to WAV file")
+                print(f"[stream_sessions] Saved chunk #{count} to {os.path.basename(packet_filename)}")
     except Exception as e:
-        print(f"[stream_sessions] Error writing chunk #{count} to WAV: {e}")
+        print(f"[stream_sessions] Error saving packet #{count}: {e}")
+    
+    # Play audio through speakers by reading the saved file
+    try:
+        if session_id in _session_audio_streams and packet_filename and os.path.exists(packet_filename):
+            # Read the packet file we just saved
+            with open(packet_filename, 'rb') as f:
+                file_pcm_data = f.read()
+            
+            # Convert PCM bytes to numpy array for sounddevice
+            audio_array = np.frombuffer(file_pcm_data, dtype=np.int16)
+            _session_audio_streams[session_id].write(audio_array)
+            if count <= 3 or count % 50 == 0:
+                print(f"[stream_sessions] Played chunk #{count} from file through speakers")
+    except Exception as e:
+        print(f"[stream_sessions] Error playing audio chunk #{count}: {e}")
     
     return {"status": "ok", "bytes_received": len(pcm_data)}, 200
 
@@ -178,25 +238,40 @@ def stop_stream(session_id):
     if session_id in _session_states:
         _session_states[session_id]['streaming'] = False
     
-    # Close and finalize WAV file
-    if session_id in _session_wav_files:
+    # Clean up packet directory reference
+    if session_id in _session_packet_dirs:
+        packet_dir = _session_packet_dirs[session_id]
+        print(f"[stream_sessions] Packets saved to: {packet_dir}")
+        del _session_packet_dirs[session_id]
+    
+    # Stop and close audio playback stream
+    if session_id in _session_audio_streams:
         try:
-            _session_wav_files[session_id].close()
-            print(f"[stream_sessions] Closed WAV file for {session_id}")
+            _session_audio_streams[session_id].stop()
+            _session_audio_streams[session_id].close()
+            print(f"[stream_sessions] Closed audio playback stream for {session_id}")
         except Exception as e:
-            print(f"[stream_sessions] Error closing WAV file: {e}")
-        del _session_wav_files[session_id]
+            print(f"[stream_sessions] Error closing audio playback: {e}")
+        del _session_audio_streams[session_id]
     
     # Clean up buffers
     if session_id in _session_audio_buffers:
         del _session_audio_buffers[session_id]
     
-    # Clean up upload counts
+    # Clean up upload counts and print latency stats
     if session_id in _upload_counts:
         total_chunks = _upload_counts[session_id]
         duration_seconds = (total_chunks * 3200) / (16000 * 2)  # 3200 bytes / (16000 Hz * 2 bytes/sample)
         print(f"[stream_sessions] Session {session_id} received {total_chunks} chunks (~{duration_seconds:.1f} seconds of audio)")
         del _upload_counts[session_id]
+    
+    # Print final latency statistics
+    if session_id in _latency_stats:
+        stats = _latency_stats[session_id]
+        if stats['count'] > 0:
+            avg_latency = stats['sum'] / stats['count']
+            print(f"[stream_sessions] Latency stats for {session_id}: avg={avg_latency:.1f}ms, min={stats['min']}ms, max={stats['max']}ms, samples={stats['count']}")
+        del _latency_stats[session_id]
     
     return {"status": "stopped"}, 200
 

@@ -12,6 +12,8 @@ dependencies = [
   "sentence-transformers",
   "pydub>=0.25.1",
   "audioop-lts",
+  "sounddevice",
+  "numpy",
 ]
 
 [build-system]
