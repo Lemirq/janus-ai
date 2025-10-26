@@ -9,13 +9,17 @@ import os
 import wave
 import threading
 import queue
-import numpy as np
 from typing import Optional
 from huggingface_hub import InferenceClient
 
 # Global transcript accumulator (consumed by the AI model)
 T: str = ""
 _T_LOCK = threading.Lock()
+
+def get_live_transcript() -> str:
+    """Safely get the current live transcript text."""
+    with _T_LOCK:
+        return T
 
 class WhisperTranscriptionService:
     """Handles real-time transcription using Whisper large-v3-turbo"""
@@ -39,7 +43,7 @@ class WhisperTranscriptionService:
         self.chunks_per_file = chunks_per_file
         
         # Audio parameters (must match incoming PCM format)
-        self.sample_rate = 16000
+        self.sample_rate = 24000
         self.channels = 1
         self.sample_width = 2  # 16-bit PCM = 2 bytes
         
@@ -94,6 +98,9 @@ class WhisperTranscriptionService:
                 continue
             try:
                 transcript = self._transcribe_wav_file(wav_path)
+                global T
+                with _T_LOCK:
+                    T = transcript
                 if transcript:
                     self._append_transcript_text(transcript)
             except Exception as e:
@@ -227,7 +234,6 @@ class WhisperTranscriptionService:
             f.write("\n\n# End of transcript\n")
         
         # No full-session WAV to close
-        
         transcript_size = os.path.getsize(self.transcript_path)
         print(f"[TRX] done size={transcript_size}")
         

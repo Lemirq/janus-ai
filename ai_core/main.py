@@ -22,7 +22,7 @@ class JanusConfig:
     base_url: str = "https://hackathon.boson.ai/v1"
     transcription_model: str = "higgs-audio-understanding-Hackathon"
     generation_model: str = "higgs-audio-generation-Hackathon"
-    reasoning_model: str = "Qwen3-32B-thinking-Hackathon"
+    reasoning_model: str = "Qwen3-Omni-30B-A3B-Thinking-Hackathon"
     
     # Audio settings
     sample_rate: int = 24000
