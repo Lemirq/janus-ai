@@ -49,18 +49,21 @@ class PersuasionEngine:
         self.current_objective = objective
         # Initialize progress tracking
         self.objective_progress = {point: False for point in objective.key_points}
-        
+
+
     def set_audience_profile(self, profile: Dict):
         """Set audience profile for better targeting"""
         self.audience_profile = profile
-        
+
+    # valid languages: "english" and "french"
     async def check_alignment(self, 
                             transcript: str, 
                             analysis: 'ConversationAnalysis',
-                            objective: PersuasionObjective) -> AlignmentAnalysis:
+                            objective: PersuasionObjective,
+                            language: str) -> AlignmentAnalysis:
         """Check how current conversation aligns with persuasion objectives"""
         
-        prompt = f"""Analyze persuasion alignment:
+        prompts_dict = {"english": f"""Analyze persuasion alignment:
 
 Persuasion Objective: {objective.main_goal}
 Key Points (POPs): {json.dumps(objective.key_points)}
@@ -90,8 +93,41 @@ Consider:
 1. Are we making progress toward the objective?
 2. What opportunities does this exchange present?
 3. Should we pivot the conversation?
-4. What's the most persuasive next step toward our goals?"""
+4. What's the most persuasive next step toward our goals?""",
 
+"french": f"""Analyser l'alignement de la persuasion :
+
+Objectif de persuasion : {objective.main_goal}
+Points clés (POPs) : {json.dumps(objective.key_points)}
+Déclencheurs pour l'audience : {json.dumps(objective.audience_triggers)}
+
+Déclaration actuelle : "{transcript}"
+Analyse de la déclaration : 
+- Sentiment : {analysis.sentiment}
+- Est-ce une question : {analysis.is_question}
+- Préoccupations : {analysis.detected_concerns}
+- État émotionnel : {analysis.emotional_state}
+
+Progrès jusqu'à présent : {json.dumps(self.objective_progress)}
+
+Fournir une analyse stratégique en JSON :
+{{
+    "score_d'alignement": 0.0-1.0,
+    "points_abordés": ["points couverts dans cet échange"],
+    "points_restants": ["points encore à couvrir"],
+    "opportunités_détectées": ["opportunités pour avancer l'objectif"],
+    "pivot_suggéré": "suggestion pour orienter la conversation" ou null,
+    "niveau_d'urgence": "faible/moyenne/élevée",
+    "prochaine_meilleure_action": "action spécifique à entreprendre"
+}}
+
+À considérer :
+1. Avançons-nous vers l'objectif ?
+2. Quelles opportunités cet échange présente-t-il ?
+3. Devons-nous pivoter la conversation ?
+4. Quelle est la prochaine étape la plus persuasive vers nos objectifs ?
+"""}
+        prompt = prompts_dict[language]
         try:
             response = await self.client.chat.completions.create(
                 model=self.config.reasoning_model,
