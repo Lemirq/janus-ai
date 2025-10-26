@@ -1,6 +1,6 @@
 # Janus AI
 
-[](https://github.com/janus-ai/janus.gif)
+[]([https://github.com/janus-ai/janus.gif](https://github.com/Lemirq/janus-ai/blob/master/janus.gif))
 
 ## Overview
 
