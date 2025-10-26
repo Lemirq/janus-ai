@@ -60,7 +60,7 @@ class PersuasionEngine:
                             transcript: str, 
                             analysis: 'ConversationAnalysis',
                             objective: PersuasionObjective,
-                            language: str) -> AlignmentAnalysis:
+                            language="english") -> AlignmentAnalysis:
         """Check how current conversation aligns with persuasion objectives"""
         
         prompts_dict = {"english": f"""Analyze persuasion alignment:
