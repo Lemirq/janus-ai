@@ -28,3 +28,9 @@ ai_core/output_audio/
 
 # Compressed archives
 ai_core/fine_tuning/*.zip
+
+# Fine-tuned model data
+!ai_core\fine_tuning\models\higgs_prosody_custom\prosody_tokens.json
+!ai_core\fine_tuning\models\higgs_prosody_custom\tokenizer.json
+!ai_core\fine_tuning\models\higgs_prosody_custom\tokenizer_config.json
+!ai_core\fine_tuning\models\higgs_prosody_custom\special_tokens_map.json
