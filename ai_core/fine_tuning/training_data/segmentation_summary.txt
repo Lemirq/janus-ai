@@ -1,0 +1,18 @@
+Token-Based Audio Segmentation Summary
+==================================================
+
+Total segments: 98
+Segments with prosody: 98
+Average duration: 4.1s
+Total duration: 402.9s
+
+Prosody token distribution:
+  pitch_high: 29 segments
+  pitch_falling: 21 segments
+  pitch_low: 20 segments
+  pitch_rising: 11 segments
+  emph: 8 segments
+  pause_short: 7 segments
+  pause_long: 2 segments
+
+Output directory: training_data/segments/

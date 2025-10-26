@@ -1,0 +1,31 @@
+# Fine-Tuning Requirements for Janus AI
+# GPU Training with LoRA
+
+# Core dependencies (if not already installed)
+numpy>=1.24.0
+openai>=1.0.0
+python-dotenv>=1.0.0
+
+# PyTorch with CUDA 11.8 support (for RTX 4050)
+--extra-index-url https://download.pytorch.org/whl/cu118
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# LoRA and efficient training
+peft>=0.7.0
+transformers>=4.35.0
+accelerate>=0.24.0
+bitsandbytes>=0.41.0; platform_system != "Windows"
+
+# Dataset and utilities
+datasets>=2.14.0
+sentencepiece>=0.1.99
+
+# Progress tracking
+tqdm>=4.65.0
+tensorboard>=2.14.0
+
+# Audio processing (for segmentation)
+scipy>=1.9.0
+

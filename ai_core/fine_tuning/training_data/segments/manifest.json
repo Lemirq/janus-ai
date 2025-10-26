@@ -1,0 +1,786 @@
+[
+  {
+    "id": 1,
+    "text": "at random leaves on television <pitch_low> shows to recognize that it's a fake",
+    "audio_file": "segment_001.wav",
+    "duration": 4.110716151439478,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 2,
+    "text": "not created by the wind <pause_long> <pitch_high> no i just you know you",
+    "audio_file": "segment_002.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pause_long",
+    "has_prosody": true
+  },
+  {
+    "id": 3,
+    "text": "created by the wind <pause_long> <pitch_high> no i just you know you look",
+    "audio_file": "segment_003.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 4,
+    "text": "look at scenes from walking <pitch_rising> dead and they enter this deserted <pitch_high>",
+    "audio_file": "segment_004.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 5,
+    "text": "town as so many towns <pitch_high> are when zombies take over and the",
+    "audio_file": "segment_005.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 6,
+    "text": "the the the <pitch_high> leaves <pitch_high> you <pitch_low> know the the <pitch_falling> autumn",
+    "audio_file": "segment_006.wav",
+    "duration": 4.110716151439478,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 7,
+    "text": "you <pitch_low> know the the <pitch_falling> autumn <pitch_high> leaves are evenly spread in",
+    "audio_file": "segment_007.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 8,
+    "text": "<pitch_falling> sidewalks and i'm thinking <pitch_high> some set designer <pitch_high> did <pitch_low> that",
+    "audio_file": "segment_008.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 9,
+    "text": "some set designer <pitch_high> did <pitch_low> that <pitch_falling> thinking <pitch_low> that <pitch_high> this",
+    "audio_file": "segment_009.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 10,
+    "text": "designer <pitch_high> did <pitch_low> that <pitch_falling> thinking <pitch_low> that <pitch_high> this is what",
+    "audio_file": "segment_010.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 11,
+    "text": "that <pitch_falling> thinking <pitch_low> that <pitch_high> this is what leaves <pitch_falling> do in",
+    "audio_file": "segment_011.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 12,
+    "text": "in the <pitch_high> breeze but <pitch_high> that's <pitch_high> not <pitch_low> what they do",
+    "audio_file": "segment_012.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 13,
+    "text": "but <pitch_high> that's <pitch_high> not <pitch_low> what they do they <pitch_rising> collect they",
+    "audio_file": "segment_013.wav",
+    "duration": 4.11071615143948,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 14,
+    "text": "do they <pitch_rising> collect they <pitch_falling> circulate they're they're they're like <pitch_falling> eddies",
+    "audio_file": "segment_014.wav",
+    "duration": 4.1107161514394726,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 15,
+    "text": "like <pitch_falling> eddies in the <pitch_high> air <pitch_low> currents that'll collect them in",
+    "audio_file": "segment_015.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 16,
+    "text": "one place and not the <pitch_falling> other <pause_long> so so so <pitch_high> we",
+    "audio_file": "segment_016.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 17,
+    "text": "and not the <pitch_falling> other <pause_long> so so so <pitch_high> we <pitch_low> think",
+    "audio_file": "segment_017.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pause_long",
+    "has_prosody": true
+  },
+  {
+    "id": 18,
+    "text": "so so so <pitch_high> we <pitch_low> think if something's <pitch_falling> random that it's",
+    "audio_file": "segment_018.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 19,
+    "text": "<pitch_falling> random that it's evenly <pitch_high> spread but in <pitch_high> fact there are",
+    "audio_file": "segment_019.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 20,
+    "text": "in <pitch_high> fact there are <pitch_high> many <pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling>",
+    "audio_file": "segment_020.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 21,
+    "text": "are <pitch_high> many <pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling> elements in something that's",
+    "audio_file": "segment_021.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 22,
+    "text": "many <pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling> elements in something that's random than",
+    "audio_file": "segment_022.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pause_short",
+    "has_prosody": true
+  },
+  {
+    "id": 23,
+    "text": "<pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling> elements in something that's random than we",
+    "audio_file": "segment_023.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 24,
+    "text": "we <pause_short> <pitch_high> typically think <pause_short> so i'm <pitch_high> looking at your new",
+    "audio_file": "segment_024.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pause_short",
+    "has_prosody": true
+  },
+  {
+    "id": 25,
+    "text": "typically think <pause_short> so i'm <pitch_high> looking at your new <pitch_high> ceiling here",
+    "audio_file": "segment_025.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 26,
+    "text": "<pitch_high> ceiling here in austin <pitch_high> texas and your <pitch_high> star is <pitch_falling>",
+    "audio_file": "segment_026.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 27,
+    "text": "nice digs you got here <pitch_high> thank <pitch_low> you but uh the stars",
+    "audio_file": "segment_027.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 28,
+    "text": "you got here <pitch_high> thank <pitch_low> you but uh the stars are <pause_short>",
+    "audio_file": "segment_028.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 29,
+    "text": "<pitch_low> lights are <pitch_high> kind <pitch_low> of evenly spread on the <pitch_high> sky",
+    "audio_file": "segment_029.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 30,
+    "text": "of evenly spread on the <pitch_high> sky yeah they don't look <pitch_falling> real",
+    "audio_file": "segment_030.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 31,
+    "text": "sky yeah they don't look <pitch_falling> real <pitch_low> so <pitch_high> that's how and",
+    "audio_file": "segment_031.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 32,
+    "text": "so <pitch_high> that's how and <pitch_high> plus you know you <pitch_high> could have",
+    "audio_file": "segment_032.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 33,
+    "text": "know you <pitch_high> could have <pitch_low> thrown at least a constellation up there",
+    "audio_file": "segment_033.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 34,
+    "text": "up there or something you <pitch_high> know what i should do i should",
+    "audio_file": "segment_034.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 35,
+    "text": "should <pitch_high> get someone to <pitch_high> make me one and make one <pause_short>",
+    "audio_file": "segment_035.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 36,
+    "text": "me one and make one <pause_short> and just imitate the milky <pitch_low> way",
+    "audio_file": "segment_036.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pause_short",
+    "has_prosody": true
+  },
+  {
+    "id": 37,
+    "text": "<pitch_high> that'd be that'd be <pitch_high> beautiful right that'd be <pitch_high> beautiful and",
+    "audio_file": "segment_037.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 38,
+    "text": "give me a call i'm <emph> all in i don't think i don't",
+    "audio_file": "segment_038.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "emph",
+    "has_prosody": true
+  },
+  {
+    "id": 39,
+    "text": "it could be a genuine <emph> issue so how you <pitch_high> doing <pitch_rising>",
+    "audio_file": "segment_039.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "emph",
+    "has_prosody": true
+  },
+  {
+    "id": 40,
+    "text": "<emph> issue so how you <pitch_high> doing <pitch_rising> joe i'm doing <pitch_high> good",
+    "audio_file": "segment_040.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 41,
+    "text": "doing yeah i used to <pitch_falling> austin is an old <pause_short> [haunt <pitch_low>",
+    "audio_file": "segment_041.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 42,
+    "text": "is an old <pause_short> [haunt <pitch_low> of <pitch_low> mine <pitch_low> is <pitch_high> it",
+    "audio_file": "segment_042.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 43,
+    "text": "[haunt <pitch_low> of <pitch_low> mine <pitch_low> is <pitch_high> it yeah i met my",
+    "audio_file": "segment_043.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 44,
+    "text": "of <pitch_low> mine <pitch_low> is <pitch_high> it yeah i met my <emph> wife",
+    "audio_file": "segment_044.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 45,
+    "text": "got my masters at ut <emph> austin my wife got her phd in",
+    "audio_file": "segment_045.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "emph",
+    "has_prosody": true
+  },
+  {
+    "id": 46,
+    "text": "her phd in mathematical physics <pause_short> there and i <pitch_high> finished my phd",
+    "audio_file": "segment_046.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pause_short",
+    "has_prosody": true
+  },
+  {
+    "id": 47,
+    "text": "phd in columbia new york <pitch_rising> city but uh <pitch_high> we <pitch_low> spent",
+    "audio_file": "segment_047.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 48,
+    "text": "york <pitch_rising> city but uh <pitch_high> we <pitch_low> spent six years here <emph>",
+    "audio_file": "segment_048.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 49,
+    "text": "six years here <emph> long <emph> ago i love it here we were",
+    "audio_file": "segment_049.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "emph",
+    "has_prosody": true
+  },
+  {
+    "id": 50,
+    "text": "there was never more than <emph> one other car in front of you",
+    "audio_file": "segment_050.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "emph",
+    "has_prosody": true
+  },
+  {
+    "id": 51,
+    "text": "of you at a red <pitch_low> light just <pitch_falling> picture that a lot",
+    "audio_file": "segment_051.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 52,
+    "text": "a red <pitch_low> light just <pitch_falling> picture that a lot of folks remember",
+    "audio_file": "segment_052.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 53,
+    "text": "be <emph> totally <pitch_low> pissed <pitch_low> off the <emph> traffic here is still",
+    "audio_file": "segment_053.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 54,
+    "text": "<pitch_low> pissed <pitch_low> off the <emph> traffic here is still adorable it's ridiculous",
+    "audio_file": "segment_054.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "emph",
+    "has_prosody": true
+  },
+  {
+    "id": 55,
+    "text": "<emph> nice it's just a <pitch_rising> completely different <emph> vibe yeah so i",
+    "audio_file": "segment_055.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 56,
+    "text": "just a <pitch_rising> completely different <emph> vibe yeah so i miss you man",
+    "audio_file": "segment_056.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "emph",
+    "has_prosody": true
+  },
+  {
+    "id": 57,
+    "text": "still at it i'm still <pitch_high> at <pitch_low> it i'm still doing the",
+    "audio_file": "segment_057.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 58,
+    "text": "the thing and i thought <pause_short> you know i saw a few of",
+    "audio_file": "segment_058.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pause_short",
+    "has_prosody": true
+  },
+  {
+    "id": 59,
+    "text": "<pause_short> you know we can <pause_short> bring some some <pause_short> deep philosophical <pitch_low>",
+    "audio_file": "segment_059.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pause_short",
+    "has_prosody": true
+  },
+  {
+    "id": 60,
+    "text": "some some <pause_short> deep philosophical <pitch_low> thought <pitch_low> back because i know there's",
+    "audio_file": "segment_060.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 61,
+    "text": "right uh <pitch_rising> occasionally no <pitch_low> it's <pitch_high> in <pitch_low> you <pitch_low> it's",
+    "audio_file": "segment_061.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 62,
+    "text": "<pitch_rising> occasionally no <pitch_low> it's <pitch_high> in <pitch_low> you <pitch_low> it's <pitch_high> in",
+    "audio_file": "segment_062.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 63,
+    "text": "it's <pitch_high> in <pitch_low> you <pitch_low> it's <pitch_high> in <pitch_low> you when i'm",
+    "audio_file": "segment_063.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 64,
+    "text": "right people oh okay yeah <pitch_low> like <pitch_falling> you oh yeah <pitch_falling> yeah",
+    "audio_file": "segment_064.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 65,
+    "text": "like <pitch_falling> you oh yeah <pitch_falling> yeah it <pitch_low> comes <pitch_falling> out it",
+    "audio_file": "segment_065.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 66,
+    "text": "talk to you i've been <pitch_falling> wanting to talk to you what what",
+    "audio_file": "segment_066.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 67,
+    "text": "that what are you doing <pitch_low> well <pitch_high> all these ufo <pitch_falling> disclosures",
+    "audio_file": "segment_067.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 68,
+    "text": "are you doing <pitch_low> well <pitch_high> all these ufo <pitch_falling> disclosures <pitch_rising> yeah",
+    "audio_file": "segment_068.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 69,
+    "text": "all these ufo <pitch_falling> disclosures <pitch_rising> yeah those are you're like one of",
+    "audio_file": "segment_069.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 70,
+    "text": "a skeptical <pitch_rising> inquisitive perspective <pitch_low> on these things you're not necessarily <pitch_rising>",
+    "audio_file": "segment_070.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 71,
+    "text": "these things you're not necessarily <pitch_rising> dismissive <pitch_falling> right but you're <pitch_high> not",
+    "audio_file": "segment_071.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 72,
+    "text": "you're not necessarily <pitch_rising> dismissive <pitch_falling> right but you're <pitch_high> not <pitch_falling> willing",
+    "audio_file": "segment_072.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 73,
+    "text": "dismissive <pitch_falling> right but you're <pitch_high> not <pitch_falling> willing to just adopt this",
+    "audio_file": "segment_073.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 74,
+    "text": "we're being <emph> visited by <emph> ufos or from another planet <pitch_falling> yeah",
+    "audio_file": "segment_074.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "emph",
+    "has_prosody": true
+  },
+  {
+    "id": 75,
+    "text": "ufos or from another planet <pitch_falling> yeah so it's <pause_short> um <pause_short> by",
+    "audio_file": "segment_075.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 76,
+    "text": "planet <pitch_falling> yeah so it's <pause_short> um <pause_short> by the way let's start",
+    "audio_file": "segment_076.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pause_short",
+    "has_prosody": true
+  },
+  {
+    "id": 77,
+    "text": "they damn sure better look <pitch_falling> into it right we <pitch_high> give them",
+    "audio_file": "segment_077.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 78,
+    "text": "<pitch_falling> into it right we <pitch_high> give them folks 700 billion <pitch_rising> dollars",
+    "audio_file": "segment_078.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 79,
+    "text": "give them folks 700 billion <pitch_rising> dollars make <pitch_high> some <pitch_falling> percentage of",
+    "audio_file": "segment_079.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 80,
+    "text": "some <pitch_falling> percentage of that <pitch_falling> budget to check out the <emph> possible",
+    "audio_file": "segment_080.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 81,
+    "text": "don't <emph> understand <pitch_low> i <pitch_high> used to think that was a lot",
+    "audio_file": "segment_081.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 82,
+    "text": "dollars on the <pitch_rising> homeless <pitch_rising> every <pitch_rising> year the budget for the",
+    "audio_file": "segment_082.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 83,
+    "text": "year the budget for the <pitch_rising> homeless they got a homeless budget okay",
+    "audio_file": "segment_083.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 84,
+    "text": "i look at like the <pitch_falling> military getting 700 <pitch_rising> billion is that",
+    "audio_file": "segment_084.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 85,
+    "text": "more <pitch_falling> money you know <pitch_falling> clearly they <pitch_low> need <pitch_low> more <pitch_falling>",
+    "audio_file": "segment_085.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 86,
+    "text": "you know <pitch_falling> clearly they <pitch_low> need <pitch_low> more <pitch_falling> money because if",
+    "audio_file": "segment_086.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 87,
+    "text": "<pitch_falling> money because if you <pitch_high> can't <pitch_high> fix the la <pitch_rising> homeless",
+    "audio_file": "segment_087.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 88,
+    "text": "can't <pitch_high> fix the la <pitch_rising> homeless situation with 1 <pitch_rising> billion how",
+    "audio_file": "segment_088.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 89,
+    "text": "protect us with 700 billion <pitch_high> well <pitch_low> that's <pitch_low> not the same",
+    "audio_file": "segment_089.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 90,
+    "text": "with 700 billion <pitch_high> well <pitch_low> that's <pitch_low> not the same <pitch_falling> agency",
+    "audio_file": "segment_090.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 91,
+    "text": "that's <pitch_low> not the same <pitch_falling> agency <pitch_high> charged <pitch_low> with <pitch_low> it",
+    "audio_file": "segment_091.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 92,
+    "text": "same <pitch_falling> agency <pitch_high> charged <pitch_low> with <pitch_low> it are they <pitch_rising> better",
+    "audio_file": "segment_092.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_low",
+    "has_prosody": true
+  },
+  {
+    "id": 93,
+    "text": "with <pitch_low> it are they <pitch_rising> better they're better than the homeless people",
+    "audio_file": "segment_093.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_rising",
+    "has_prosody": true
+  },
+  {
+    "id": 94,
+    "text": "better than the homeless people <pitch_high> no <pitch_low> i'm <pitch_rising> saying the <pitch_falling>",
+    "audio_file": "segment_094.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_high",
+    "has_prosody": true
+  },
+  {
+    "id": 95,
+    "text": "<pitch_falling> mayor's office of los <pitch_falling> angeles sucks <pitch_falling> boston <pitch_rising> right yeah",
+    "audio_file": "segment_095.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 96,
+    "text": "boston <pitch_rising> right yeah who's <pitch_falling> running <pitch_falling> what i got in <pitch_falling>",
+    "audio_file": "segment_096.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 97,
+    "text": "<pitch_falling> what i got in <pitch_falling> trouble this past <pitch_falling> february when the",
+    "audio_file": "segment_097.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  },
+  {
+    "id": 98,
+    "text": "past <pitch_falling> february when the <pitch_falling> electricity went out in <pitch_falling> texas and",
+    "audio_file": "segment_098.wav",
+    "duration": 4.110716151439476,
+    "prosody_token": "pitch_falling",
+    "has_prosody": true
+  }
+]

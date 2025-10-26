@@ -37,9 +37,9 @@ class ProgressCallback(TrainerCallback):
     def on_epoch_begin(self, args, state, control, **kwargs):
         self.epoch_start = datetime.now()
         epoch = int(state.epoch) + 1 if state.epoch else 1
-        print(f"\n{'─'*70}")
+        print(f"\n{'-'*70}")
         print(f"EPOCH {epoch}/{args.num_train_epochs}")
-        print(f"{'─'*70}")
+        print(f"{'-'*70}")
         
     def on_log(self, args, state, control, logs=None, **kwargs):
         if logs:
@@ -56,7 +56,7 @@ class ProgressCallback(TrainerCallback):
             
     def on_epoch_end(self, args, state, control, **kwargs):
         epoch = int(state.epoch) if state.epoch else 0
-        print(f"\n✓ Epoch {epoch} complete")
+        print(f"\n[COMPLETE] Epoch {epoch} done")
         
     def on_train_end(self, args, state, control, **kwargs):
         total_time = (datetime.now() - self.start_time).total_seconds()
@@ -67,7 +67,15 @@ class ProgressCallback(TrainerCallback):
         print(f"TRAINING COMPLETE!")
         print(f"{'='*70}")
         print(f"Total time: {hours}h {mins}m {secs}s")
-        print(f"Final loss: {state.log_history[-1].get('loss', 'N/A'):.4f}")
+        
+        # Get final loss safely
+        if state.log_history:
+            final_loss = state.log_history[-1].get('loss', 'N/A')
+            if isinstance(final_loss, (int, float)):
+                print(f"Final loss: {final_loss:.4f}")
+            else:
+                print(f"Final loss: {final_loss}")
+        
         print("="*70 + "\n")
 
 
@@ -111,6 +119,14 @@ def setup_lora_model(model_name="gpt2", lora_r=16, lora_alpha=32):
     print(f"[5/5] Applying LoRA adapters")
     model = get_peft_model(model, lora_config)
     
+    # Ensure model is trainable
+    model.train()
+    
+    # Enable gradients for LoRA parameters
+    for name, param in model.named_parameters():
+        if 'lora' in name.lower():
+            param.requires_grad = True
+    
     # Calculate trainable parameters
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
     total = sum(p.numel() for p in model.parameters())
@@ -134,7 +150,7 @@ def load_dataset(data_path="training_data/prosody_dataset.json"):
     with open(data_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
-    print(f"✓ Loaded {len(data)} examples")
+    print(f"[OK] Loaded {len(data)} examples")
     
     return data
 
@@ -170,21 +186,24 @@ def train(epochs=3, batch_size=4, lora_r=16, test_mode=False, output_dir="models
     print(f"Tokenizing {len(texts)} examples...")
     encodings = tokenizer(texts, truncation=True, padding=True, max_length=512, return_tensors="pt")
     
-    # Create dataset
+    # Create dataset with labels
     class SimpleDataset(torch.utils.data.Dataset):
         def __init__(self, encodings):
             self.encodings = encodings
         def __len__(self):
             return len(self.encodings['input_ids'])
         def __getitem__(self, idx):
-            return {k: v[idx] for k, v in self.encodings.items()}
+            item = {k: v[idx] for k, v in self.encodings.items()}
+            # Labels are the input_ids shifted (for language modeling)
+            item['labels'] = item['input_ids'].clone()
+            return item
     
     dataset = SimpleDataset(encodings)
     train_size = int(0.9 * len(dataset))
     val_size = len(dataset) - train_size
     train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
     
-    print(f"✓ Train: {len(train_dataset)}, Val: {len(val_dataset)}")
+    print(f"[OK] Train: {len(train_dataset)}, Val: {len(val_dataset)}")
     
     # Training arguments
     Path(output_dir).mkdir(parents=True, exist_ok=True)
@@ -199,13 +218,13 @@ def train(epochs=3, batch_size=4, lora_r=16, test_mode=False, output_dir="models
         logging_steps=1,  # Log every step
         save_steps=max(50, len(train_dataset) // (batch_size * 2)),
         eval_steps=max(50, len(train_dataset) // (batch_size * 2)),
-        evaluation_strategy="steps",
+        eval_strategy="steps",  # Changed from evaluation_strategy (newer transformers)
         save_strategy="steps",
         load_best_model_at_end=True,
-        fp16=True,  # Use mixed precision for RTX 4050
-        gradient_checkpointing=True,
+        fp16=False,  # Disable mixed precision for compatibility
+        gradient_checkpointing=False,  # Disable for now to avoid gradient issues
         logging_dir=f"{output_dir}/logs",
-        report_to=["tensorboard"],
+        report_to=[],  # Disable tensorboard for test
     )
     
     # Calculate total steps for progress
@@ -243,14 +262,14 @@ def train(epochs=3, batch_size=4, lora_r=16, test_mode=False, output_dir="models
     with open(f"{output_dir}/prosody_tokens.json", 'w') as f:
         json.dump(prosody_map, f, indent=2)
     
-    print(f"\n✓ Model saved to: {output_dir}/")
-    print(f"✓ Files created:")
+    print(f"\n[SAVED] Model saved to: {output_dir}/")
+    print(f"[SAVED] Files created:")
     print(f"    - adapter_model.bin")
     print(f"    - adapter_config.json")
     print(f"    - tokenizer/")
     print(f"    - prosody_tokens.json")
     
-    print(f"\n✓ STEP 3 COMPLETE")
+    print(f"\n[COMPLETE] STEP 3 DONE!")
     print(f"Model ready to use!")
 
 
