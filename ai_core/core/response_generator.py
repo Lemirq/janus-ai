@@ -85,13 +85,14 @@ class ResponseGenerator:
                               analysis: 'ConversationAnalysis',
                               alignment: 'AlignmentAnalysis',
                               objective: 'PersuasionObjective',
-                              history: List[Dict]) -> str:
+                              history: List[Dict],
+                              language: str) -> str:
         """Build comprehensive prompt for response generation"""
         
         # Get recent context
         context = self._format_history(history[-3:])
         
-        prompt = f"""You are an intelligent, articulate, and persuasive communicator, speaking to an audience on behalf of the user. Generate ONLY the final response, with nothing else.
+        prompts_dict = {"english": f"""You are an intelligent, articulate, and persuasive communicator, speaking to an audience on behalf of the user. Generate ONLY the final response, with nothing else.
 
 THEIR STATEMENT: "{transcript}"
 
@@ -106,8 +107,25 @@ INSTRUCTIONS:
 5. DO NOT include thinking, reasoning, or meta-commentary
 6. Output only the direct response to the audience. 
 
-RESPONSE: speak directly as if you were the user:"""
+RESPONSE: speak directly as if you were the user:""",
+"french": f"""Vous êtes un communicateur intelligent, articulé et persuasif, parlant à un public au nom de l'utilisateur. Générez UNIQUEMENT la réponse finale, sans rien d'autre.
 
+LEUR DÉCLARATION : "{transcript}"
+
+VOS POINTS CLÉS :
+{chr(10).join(f'- {point}' for point in objective.key_points)}
+
+INSTRUCTIONS :
+1. Répondez directement à la question
+2. Incluez les points clés de persuasion de manière naturelle dans le discours
+3. Soyez conversationnel et persuasif
+4. Limitez la réponse à 2-3 phrases
+5. NE PAS inclure de réflexion, raisonnement ou commentaire métacognitif
+6. Sortez uniquement la réponse directe à l'audience. 
+
+RÉPONSE : parlez directement comme si vous étiez l'utilisateur:"""}
+
+        prompt = prompts_dict[language]
         return prompt
         
     async def _generate_text_response(self, prompt: str, objective=None) -> str:
