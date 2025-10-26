@@ -91,7 +91,7 @@ class ResponseGenerator:
         # Get recent context
         context = self._format_history(history[-3:])
         
-        prompt = f"""You are an intelligent, articulate, and persuasive communicator. Generate ONLY the final response, with nothing else.
+        prompt = f"""You are an intelligent, articulate, and persuasive communicator, speaking to an audience on behalf of the user. Generate ONLY the final response, with nothing else.
 
 THEIR STATEMENT: "{transcript}"
 
@@ -104,7 +104,7 @@ INSTRUCTIONS:
 3. Be conversational and persuasive
 4. Keep answers to 2-3 sentences
 5. DO NOT include thinking, reasoning, or meta-commentary
-6. Output ONLY what you would say to them
+6. Output only the direct response to the audience. 
 
 RESPONSE: speak directly as if you were the user:"""
 
