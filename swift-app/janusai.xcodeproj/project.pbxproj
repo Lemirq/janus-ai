@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		578E750F2EAD572B00585794 /* Exceptions for "janusai" folder in "janusai" target */ = {
+		575158682EADA36E00FB8E3B /* Exceptions for "janusai" folder in "janusai" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +24,7 @@
 		579A9BC82EAC505800594794 /* janusai */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				578E750F2EAD572B00585794 /* Exceptions for "janusai" folder in "janusai" target */,
+				575158682EADA36E00FB8E3B /* Exceptions for "janusai" folder in "janusai" target */,
 			);
 			path = janusai;
 			sourceTree = "<group>";

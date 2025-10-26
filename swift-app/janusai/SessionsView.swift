@@ -9,8 +9,7 @@ import SwiftUI
 
 
 struct SessionsView: View {
-    @State private var queryText: String = ""
-    @State private var results: [APIService.QueryResult] = []
+    @State private var sessions: [APIService.SessionSummary] = []
     @State private var status: String = ""
     @State private var isLoading = false
 
@@ -21,7 +20,7 @@ struct SessionsView: View {
 
                 if !status.isEmpty { Text(status).font(.footnote).foregroundColor(.secondary) }
 
-                if results.isEmpty {
+                if sessions.isEmpty {
                     VStack(spacing: 12) {
                         Image(systemName: "tray")
                             .font(.system(size: 40))
@@ -35,12 +34,20 @@ struct SessionsView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    List(results, id: \.id) { item in
-                        VStack(alignment: .leading) {
-                            Text(item.text).font(.body)
-                            if let d = item.distance {
-                                Text(String(format: "Distance: %.3f", d)).font(.caption).foregroundColor(.secondary)
+                    List(sessions, id: \.id) { s in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(s.objective).font(.body)
+                                if let created = s.createdAt { Text(created).font(.caption).foregroundColor(.secondary) }
                             }
+                            Spacer()
+                            Text((s.status ?? "").capitalized)
+                                .font(.caption.weight(.semibold))
+                                .padding(.vertical, 4)
+                                .padding(.horizontal, 8)
+                                .background(statusColor(s.status).opacity(0.15))
+                                .foregroundColor(statusColor(s.status))
+                                .clipShape(Capsule())
                         }
                     }
                 }
@@ -51,18 +58,30 @@ struct SessionsView: View {
                     Image(systemName: "plus.circle.fill")
                 }
             }
+            .task { await reload() }
+            .refreshable { await reload() }
         }
     }
 
-    private func doQuery() async {
+    private func reload() async {
         isLoading = true
         defer { isLoading = false }
         do {
-            results = try await APIService.shared.queryDocuments(query: queryText)
-            status = "Found \(results.count) results"
+            sessions = try await APIService.shared.listSessions()
+            status = "Loaded \(sessions.count) sessions"
         } catch {
-            status = "Query failed: \(error.localizedDescription)"
+            status = "Load failed: \(error.localizedDescription)"
         }
+    }
+}
+
+private func statusColor(_ status: String?) -> Color {
+    switch (status ?? "").lowercased() {
+    case "created": return .gray
+    case "running": return .blue
+    case "stopped": return .orange
+    case "completed": return .green
+    default: return .secondary
     }
 }
 

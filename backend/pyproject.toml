@@ -7,8 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
   "flask",
   "flask-cors",
-  "flask-sock",
-  "simple-websocket",
   "simpleaudio",
   "chromadb",
   "sentence-transformers",

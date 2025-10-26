@@ -7,5 +7,7 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Microphone access is required to stream your voice to the backend.</string>
 </dict>
 </plist>

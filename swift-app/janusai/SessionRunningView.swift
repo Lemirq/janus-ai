@@ -34,6 +34,10 @@ final class StreamAudioPlayer: ObservableObject {
 struct SessionRunningView: View {
     let sessionId: String
     @StateObject private var player = StreamAudioPlayer()
+    @State private var isStarting = false
+    @State private var isStopping = false
+    @State private var status: String = ""
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         VStack(spacing: 16) {
@@ -49,17 +53,72 @@ struct SessionRunningView: View {
                 .cornerRadius(8)
 
             HStack {
-                Button("Stop") { player.stop() }
+                Button("Stop") { Task { await stopSessionAndStream() } }
                     .buttonStyle(.bordered)
-                Button("Start") { player.start(sessionId: sessionId) }
+                    .disabled(isStarting || isStopping)
+                Button("Start") { Task { await startSessionAndStream() } }
                     .buttonStyle(.borderedProminent)
+                    .disabled(isStarting || isStopping)
+                Button("Done") { Task { await completeAndExit() } }
+                    .buttonStyle(.bordered)
+                    .tint(.green)
+                    .disabled(isStarting || isStopping)
+            }
+
+            if !status.isEmpty {
+                Text(status)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
             }
         }
         .padding()
         .navigationTitle("Session Running")
+        .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled(true)
-        .onAppear { player.start(sessionId: sessionId) }
         .onDisappear { player.stop() }
+    }
+}
+
+private extension SessionRunningView {
+    func startSessionAndStream() async {
+        isStarting = true
+        status = "Starting..."
+        defer { isStarting = false }
+        do {
+            try await APIService.shared.startSession(id: sessionId)
+            player.start(sessionId: sessionId)
+            status = "Started"
+        } catch {
+            status = "Start failed: \(error.localizedDescription)"
+        }
+    }
+
+    func stopSessionAndStream() async {
+        isStopping = true
+        status = "Stopping..."
+        defer { isStopping = false }
+        do {
+            try await APIService.shared.stopSession(id: sessionId)
+            player.stop()
+            status = "Stopped"
+        } catch {
+            player.stop()
+            status = "Stopped (API error): \(error.localizedDescription)"
+        }
+    }
+
+    func completeAndExit() async {
+        isStopping = true
+        status = "Completing..."
+        defer { isStopping = false }
+        do {
+            player.stop()
+            try await APIService.shared.completeSession(id: sessionId)
+            status = "Completed"
+            dismiss()
+        } catch {
+            status = "Complete failed: \(error.localizedDescription)"
+        }
     }
 }
 

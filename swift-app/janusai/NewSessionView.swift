@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 struct NewSessionView: View {
     @State private var objective: String = ""
     @State private var pickedDocs: [PickedDocument] = []
@@ -24,7 +23,11 @@ struct NewSessionView: View {
                 TextField("Describe your objective...", text: $objective, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .lineLimit(3...6)
-
+                    .onAppear {
+                        if objective.isEmpty {
+                            objective = "Sell to a skeptical customer on a cold call"
+                        }
+                    }
                 Divider()
 
                 Text("Upload files (ingest to Chroma)")

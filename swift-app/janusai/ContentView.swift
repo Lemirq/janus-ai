@@ -38,7 +38,7 @@ struct OnboardingView: View {
                 LinearGradient(colors: [Color.black.opacity(0.35), Color.green.opacity(0.15)], startPoint: .topLeading, endPoint: .bottomTrailing)
                     .ignoresSafeArea()
 
-                ScrollView {
+                ScrollView { 
                     VStack(spacing: 20) {
                         VStack(spacing: 12) {
                             Image(systemName: "sparkles")

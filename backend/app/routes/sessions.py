@@ -112,3 +112,24 @@ def stop_session(session_id: str):
     return jsonify({"ok": True})
 
 
+
+@bp.post("/sessions/<session_id>/complete")
+def complete_session(session_id: str):
+    p = _session_path(session_id)
+    if not os.path.exists(p):
+        return jsonify({"error": "not found"}), 404
+    with open(p, "r") as f:
+        sess = json.load(f)
+    sess["status"] = "completed"
+    sess["completedAt"] = datetime.utcnow().isoformat() + "Z"
+    with open(p, "w") as f:
+        json.dump(sess, f)
+    # update index
+    idx = _read_index()
+    for s in idx.get("sessions", []):
+        if s.get("id") == session_id:
+            s["status"] = "completed"
+            break
+    _write_index(idx)
+    return jsonify({"ok": True})
+

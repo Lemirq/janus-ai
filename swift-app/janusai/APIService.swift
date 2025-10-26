@@ -26,9 +26,13 @@ final class APIService {
     // MARK: - Health
     func checkHealth() async throws -> Bool {
         guard let url = URL(string: "\(baseURL)/health") else { return false }
-        let (data, _) = try await URLSession.shared.data(from: url)
-        let response = try jsonDecoder.decode([String: String].self, from: data)
-        return response["status"] == "ok"
+        print("[HTTP REQ][Swift] GET \(url.absoluteString)")
+        let (data, response) = try await URLSession.shared.data(from: url)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] GET \(url.absoluteString) status=\(http.statusCode) body=\(String(data: data, encoding: .utf8) ?? "<non-utf8>")")
+        }
+        let r = try jsonDecoder.decode([String: String].self, from: data)
+        return r["status"] == "ok"
     }
 
     // MARK: - Ingest
@@ -46,9 +50,13 @@ final class APIService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
 
-        let (data, _) = try await URLSession.shared.data(for: request)
-        let response = try jsonDecoder.decode(IngestResponse.self, from: data)
-        return response
+        print("[HTTP REQ][Swift] POST \(url.absoluteString) body=\(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? "<binary>")")
+        let (data, response) = try await URLSession.shared.data(for: request)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] POST \(url.absoluteString) status=\(http.statusCode) body=\(String(data: data, encoding: .utf8) ?? "<non-utf8>")")
+        }
+        let r = try jsonDecoder.decode(IngestResponse.self, from: data)
+        return r
     }
 
     // MARK: - Query
@@ -71,16 +79,20 @@ final class APIService {
         components.queryItems = items
 
         guard let url = components.url else { throw URLError(.badURL) }
-        let (data, _) = try await URLSession.shared.data(from: url)
-        let response = try jsonDecoder.decode(QueryResponse.self, from: data)
-        return response.results
+        print("[HTTP REQ][Swift] GET \(url.absoluteString)")
+        let (data, response) = try await URLSession.shared.data(from: url)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] GET \(url.absoluteString) status=\(http.statusCode) body=\(String(data: data, encoding: .utf8) ?? "<non-utf8>")")
+        }
+        let r = try jsonDecoder.decode(QueryResponse.self, from: data)
+        return r.results
     }
 }
 
 // MARK: - Voice Upload
 extension APIService {
     // Sessions
-    struct Session: Codable { let id: String; let objective: String; let fileIds: [String]?; let status: String? }
+    struct Session: Codable { let id: String; let objective: String; let fileIds: [String]?; let status: String?; let createdAt: String? }
 
     func createSession(objective: String, fileIds: [String]) async throws -> Session {
         guard let url = URL(string: "\(baseURL)/sessions") else { throw URLError(.badURL) }
@@ -89,7 +101,11 @@ extension APIService {
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let body: [String: Any] = ["objective": objective, "fileIds": fileIds]
         req.httpBody = try JSONSerialization.data(withJSONObject: body)
-        let (data, _) = try await URLSession.shared.data(for: req)
+        print("[HTTP REQ][Swift] POST \(url.absoluteString) body=\(String(data: req.httpBody ?? Data(), encoding: .utf8) ?? "<binary>")")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] POST \(url.absoluteString) status=\(http.statusCode) body=\(String(data: data, encoding: .utf8) ?? "<non-utf8>")")
+        }
         return try jsonDecoder.decode(Session.self, from: data)
     }
 
@@ -97,14 +113,47 @@ extension APIService {
         guard let url = URL(string: "\(baseURL)/sessions/\(id)/start") else { throw URLError(.badURL) }
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
-        _ = try await URLSession.shared.data(for: req)
+        print("[HTTP REQ][Swift] POST \(url.absoluteString)")
+        let (_, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] POST \(url.absoluteString) status=\(http.statusCode)")
+        }
     }
 
     func stopSession(id: String) async throws {
         guard let url = URL(string: "\(baseURL)/sessions/\(id)/stop") else { throw URLError(.badURL) }
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
-        _ = try await URLSession.shared.data(for: req)
+        print("[HTTP REQ][Swift] POST \(url.absoluteString)")
+        let (_, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] POST \(url.absoluteString) status=\(http.statusCode)")
+        }
+    }
+
+    func completeSession(id: String) async throws {
+        guard let url = URL(string: "\(baseURL)/sessions/\(id)/complete") else { throw URLError(.badURL) }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        print("[HTTP REQ][Swift] POST \(url.absoluteString)")
+        let (_, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] POST \(url.absoluteString) status=\(http.statusCode)")
+        }
+    }
+
+    struct SessionsIndex: Codable { let sessions: [SessionSummary] }
+    struct SessionSummary: Codable { let id: String; let objective: String; let createdAt: String?; let status: String? }
+
+    func listSessions() async throws -> [SessionSummary] {
+        guard let url = URL(string: "\(baseURL)/sessions") else { throw URLError(.badURL) }
+        print("[HTTP REQ][Swift] GET \(url.absoluteString)")
+        let (data, response) = try await URLSession.shared.data(from: url)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] GET \(url.absoluteString) status=\(http.statusCode) body=\(String(data: data, encoding: .utf8) ?? "<non-utf8>")")
+        }
+        let idx = try jsonDecoder.decode(SessionsIndex.self, from: data)
+        return idx.sessions
     }
     struct VoiceUploadResponse: Codable { let id: String; let wpm: Double?; let duration: Double; let words: Int }
 
@@ -137,23 +186,24 @@ extension APIService {
         appendField(name: "duration", value: String(duration))
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
 
-        let (data, _) = try await URLSession.shared.upload(for: request, from: body)
+        print("[HTTP REQ][Swift] POST \(url.absoluteString) multipart bytes=\(body.count)")
+        let (data, response) = try await URLSession.shared.upload(for: request, from: body)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] POST \(url.absoluteString) status=\(http.statusCode) body=\(String(data: data, encoding: .utf8) ?? "<non-utf8>")")
+        }
         return try jsonDecoder.decode(VoiceUploadResponse.self, from: data)
     }
 
-    // MARK: - WebSocket URL helper
-    func webSocketURL(sessionId: String) -> URL? {
-        // Convert http(s) base to ws(s) and strip trailing /api
-        var root = baseURL
-        if let range = root.range(of: "/api", options: [.backwards]) {
-            root.removeSubrange(range)
-        }
-        let wsBase: String
-        if root.hasPrefix("https://") {
-            wsBase = root.replacingOccurrences(of: "https://", with: "wss://")
-        } else {
-            wsBase = root.replacingOccurrences(of: "http://", with: "ws://")
-        }
-        return URL(string: "\(wsBase)/ws/sessions/\(sessionId)")
+    // MARK: - HTTP Streaming URLs
+    func streamAudioURL(sessionId: String) -> URL? {
+        return URL(string: "\(baseURL)/sessions/\(sessionId)/stream_audio")
+    }
+    
+    func uploadAudioChunkURL(sessionId: String) -> URL? {
+        return URL(string: "\(baseURL)/sessions/\(sessionId)/upload_audio")
+    }
+    
+    func stopStreamURL(sessionId: String) -> URL? {
+        return URL(string: "\(baseURL)/sessions/\(sessionId)/stop_stream")
     }
 }
