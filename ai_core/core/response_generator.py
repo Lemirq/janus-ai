@@ -7,6 +7,7 @@ from typing import List, Dict, Optional, Tuple
 from openai import AsyncOpenAI
 import json
 import asyncio
+import re
 
 from .prosody_tokenizer import ProsodyTokenizer, ProsodyStrategy
 
@@ -52,8 +53,8 @@ class ResponseGenerator:
             transcript, analysis, alignment, objective, history
         )
         
-        # Generate response using reasoning model
-        response_text = await self._generate_text_response(prompt)
+        # Generate response using non-thinking model
+        response_text = await self._generate_text_response(prompt, objective)
         
         # Apply prosody based on context
         prosody_context = self._build_prosody_context(analysis, alignment)
@@ -90,58 +91,56 @@ class ResponseGenerator:
         # Get recent context
         context = self._format_history(history[-3:])
         
-        prompt = f"""Generate a persuasive response for this scenario:
+        prompt = f"""You are a persuasive communicator. Generate ONLY the final response, nothing else.
 
-OBJECTIVE: {objective.main_goal}
-KEY POINTS TO COVER: {', '.join(objective.key_points)}
-AUDIENCE TRIGGERS: {', '.join(objective.audience_triggers)}
+THEIR STATEMENT: "{transcript}"
 
-CURRENT STATEMENT: "{transcript}"
-ANALYSIS:
-- Type: {analysis.question_type if analysis.is_question else 'statement'}
-- Sentiment: {analysis.sentiment}
-- Emotional State: {analysis.emotional_state}
-- Concerns: {', '.join(analysis.detected_concerns)}
+YOUR KEY POINTS:
+{chr(10).join(f'- {point}' for point in objective.key_points)}
 
-STRATEGIC CONTEXT:
-- Alignment Score: {alignment.alignment_score:.2f}
-- Remaining Points: {', '.join(alignment.remaining_points[:3])}
-- Opportunities: {', '.join(alignment.detected_opportunities)}
-- Suggested Action: {alignment.next_best_action}
+INSTRUCTIONS:
+1. Answer their question directly
+2. Include your key points naturally
+3. Be conversational and persuasive
+4. Keep it to 2-3 sentences
+5. DO NOT include thinking, reasoning, or meta-commentary
+6. Output ONLY what you would say to them
 
-RECENT CONVERSATION:
-{context}
-
-Generate a persuasive response that:
-1. Directly addresses any questions or concerns
-2. Advances toward the objective
-3. Uses audience triggers naturally
-4. Maintains appropriate emotional tone
-5. Creates forward momentum
-
-Response should be natural, conversational, and persuasive without being pushy.
-Maximum 2-3 sentences unless answering a complex question."""
+RESPONSE (speak directly to them):"""
 
         return prompt
         
-    async def _generate_text_response(self, prompt: str) -> str:
-        """Generate text response using reasoning model"""
+    async def _generate_text_response(self, prompt: str, objective=None) -> str:
+        """Generate text response using non-thinking model"""
         try:
             response = await self.client.chat.completions.create(
-                model=self.config.reasoning_model,
+                model="Qwen3-32B-non-thinking-Hackathon",  # Use non-thinking model!
                 messages=[
-                    {"role": "system", "content": "You are a persuasive communication expert. Generate natural, compelling responses."},
+                    {"role": "system", "content": "You are a persuasive sales professional. Respond directly and naturally. Do not show your thinking process."},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.7,
-                max_tokens=256
+                max_tokens=150,  # Shorter to avoid rambling
+                stop=["\n\n", "However,", "Additionally,"]  # Stop at natural breaks
             )
             
-            return response.choices[0].message.content.strip()
+            result = response.choices[0].message.content.strip()
+            
+            # Remove any meta-commentary that leaked through
+            result = re.sub(r'^(Okay|Alright|Let me|First|So)[,.]?\s+', '', result, flags=re.IGNORECASE)
+            result = re.sub(r'(I (should|need to|will|can)).*?[.!]', '', result, flags=re.IGNORECASE)
+            
+            if not result and objective:
+                return f"Let me address that. {objective.key_points[0]}."
+            
+            return result if result else "I understand your question."
             
         except Exception as e:
             print(f"Response generation error: {e}")
-            return "I understand your point. Let me address that for you."
+            # Return a direct response using first key point if available
+            if objective and objective.key_points:
+                return f"Great question! {objective.key_points[0]}."
+            return "I understand your question. Let me help you with that."
             
     def _apply_prosody(self, text: str, context: Dict) -> str:
         """Apply prosody markup to response text"""
@@ -151,19 +150,24 @@ Maximum 2-3 sentences unless answering a complex question."""
         
         # Additional context-specific prosody
         if context.get('is_addressing_concern'):
-            # Add calming prosody for concerns
-            prosody_text = f"<CALM> {prosody_text}"
+            # Add brief pause before addressing concerns
+            prosody_text = f"<pause_short> {prosody_text}"
             
         if context.get('is_presenting_benefit'):
-            # Add enthusiasm for benefits
-            prosody_text = prosody_text.replace("save", "<EMPH>save")
-            prosody_text = prosody_text.replace("improve", "<EMPH>improve")
-            prosody_text = prosody_text.replace("increase", "<EMPH>increase")
+            # Add emphasis to benefits
+            if "save" in prosody_text.lower():
+                prosody_text = re.sub(r'\bsave\b', '<emph>save', prosody_text, flags=re.IGNORECASE, count=1)
+            if "improve" in prosody_text.lower():
+                prosody_text = re.sub(r'\bimprove\b', '<emph>improve', prosody_text, flags=re.IGNORECASE, count=1)
+            if "increase" in prosody_text.lower():
+                prosody_text = re.sub(r'\bincrease\b', '<emph>increase', prosody_text, flags=re.IGNORECASE, count=1)
             
         if context.get('urgency_level') == 'high':
-            # Add urgency markers
-            prosody_text = prosody_text.replace("now", "<STRONG>now")
-            prosody_text = prosody_text.replace("today", "<STRONG>today")
+            # Add emphasis to urgency words
+            if "now" in prosody_text.lower():
+                prosody_text = re.sub(r'\bnow\b', '<emph>now', prosody_text, flags=re.IGNORECASE, count=1)
+            if "today" in prosody_text.lower():
+                prosody_text = re.sub(r'\btoday\b', '<emph>today', prosody_text, flags=re.IGNORECASE, count=1)
             
         return prosody_text
         

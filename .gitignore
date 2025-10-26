@@ -5,3 +5,4 @@
 /ai_core/.env
 /ai_core/jre_training_audio.wav/
 ai_core/fine_tuning/jre_training_audio.wav/
+/ai_core/__pycache__/
