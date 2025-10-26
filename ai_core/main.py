@@ -388,45 +388,81 @@ async def generate_single_response(janus, user_input: str, talking_points: list,
     max_retries = 3
     audio_data = None
     
-    for attempt in range(max_retries):
-        try:
-            if attempt == 0:
-                print(f"[ATTEMPT {attempt+1}] With prosody...")
-                audio_data = await janus.audio_generator.generate(
-                    clean_prosody,
-                    janus.response_generator.prosody_tokenizer.encode_with_prosody(clean_prosody),
-                    response.voice_profile
-                )
-            elif attempt == 1:
-                print(f"[ATTEMPT {attempt+1}] Simplified...")
-                simplified = re.sub(r'<pause_[a-z]+>|<pitch_[a-z]+>', '', clean_prosody, flags=re.IGNORECASE)
-                audio_data = await janus.audio_generator.generate_simple(simplified, response.voice_profile)
-            else:
-                print(f"[ATTEMPT {attempt+1}] Plain text...")
-                plain = re.sub(r'<[a-z_]+>', '', clean_prosody, flags=re.IGNORECASE)
-                audio_data = await janus.audio_generator.generate_simple(plain, response.voice_profile)
-            
-            if audio_data and len(audio_data) > 1000:
-                duration = len(audio_data) / (24000 * 2)
-                if duration < 20:
-                    break
-                print(f"[WARNING] Audio too long ({duration:.1f}s), retrying...")
-                audio_data = None
-                
-        except Exception as e:
-            print(f"[WARNING] Attempt {attempt+1} failed: {str(e)[:100]}")
-            audio_data = None
-        
-        if audio_data is None and attempt < max_retries - 1:
-            await asyncio.sleep(1)
+    # Try streaming generation first
+    streaming_success = False
     
-    if audio_data and len(audio_data) > 1000:
-        await janus.audio_generator.save_to_file(audio_data, output_file)
-        print(f"\n[SUCCESS] {output_file}")
-        print(f"  Duration: {len(audio_data) / (24000 * 2):.1f}s")
-        print(f"  Size: {len(audio_data) / 1024:.1f} KB")
-    else:
-        print(f"\n[ERROR] Audio generation failed after {max_retries} attempts")
+    try:
+        print(f"[ATTEMPT 1] Streaming generation with prosody...")
+        audio_stream = janus.audio_generator.generate_streaming(
+            clean_prosody,
+            janus.response_generator.prosody_tokenizer.encode_with_prosody(clean_prosody),
+            response.voice_profile
+        )
+        
+        # Save with streaming
+        await janus.audio_generator.save_streaming_to_file(audio_stream, output_file)
+        
+        # Check file size
+        from pathlib import Path
+        if Path(output_file).exists():
+            file_size = Path(output_file).stat().st_size
+            duration = file_size / (24000 * 2)
+            
+            if duration < 20 and file_size > 1000:
+                print(f"\n[SUCCESS] {output_file}")
+                print(f"  Duration: {duration:.1f}s")
+                print(f"  Size: {file_size / 1024:.1f} KB")
+                streaming_success = True
+            else:
+                print(f"[WARNING] Generated audio invalid, trying batch mode...")
+                streaming_success = False
+    except Exception as e:
+        print(f"[INFO] Streaming mode not available: {str(e)[:80]}")
+        print(f"[INFO] Falling back to batch generation...")
+        streaming_success = False
+    
+    # Fallback to batch mode if streaming failed
+    if not streaming_success:
+        audio_data = None
+        for attempt in range(max_retries):
+            try:
+                if attempt == 0:
+                    print(f"[ATTEMPT {attempt+1}] With prosody...")
+                    audio_data = await janus.audio_generator.generate(
+                        clean_prosody,
+                        janus.response_generator.prosody_tokenizer.encode_with_prosody(clean_prosody),
+                        response.voice_profile
+                    )
+                elif attempt == 1:
+                    print(f"[ATTEMPT {attempt+1}] Simplified...")
+                    simplified = re.sub(r'<pause_[a-z]+>|<pitch_[a-z]+>', '', clean_prosody, flags=re.IGNORECASE)
+                    audio_data = await janus.audio_generator.generate_simple(simplified, response.voice_profile)
+                else:
+                    print(f"[ATTEMPT {attempt+1}] Plain text...")
+                    plain = re.sub(r'<[a-z_]+>', '', clean_prosody, flags=re.IGNORECASE)
+                    audio_data = await janus.audio_generator.generate_simple(plain, response.voice_profile)
+                
+                if audio_data and len(audio_data) > 1000:
+                    duration = len(audio_data) / (24000 * 2)
+                    if duration < 20:
+                        break
+                    print(f"[WARNING] Audio too long ({duration:.1f}s), retrying...")
+                    audio_data = None
+                    
+            except Exception as e:
+                print(f"[WARNING] Attempt {attempt+1} failed: {str(e)[:100]}")
+                audio_data = None
+            
+            if audio_data is None and attempt < max_retries - 1:
+                await asyncio.sleep(1)
+        
+        if audio_data and len(audio_data) > 1000:
+            await janus.audio_generator.save_to_file(audio_data, output_file)
+            print(f"\n[SUCCESS] {output_file}")
+            print(f"  Duration: {len(audio_data) / (24000 * 2):.1f}s")
+            print(f"  Size: {len(audio_data) / 1024:.1f} KB")
+        else:
+            print(f"\n[ERROR] Audio generation failed after {max_retries} attempts")
     
     print(f"\n{'='*70}\n")
 

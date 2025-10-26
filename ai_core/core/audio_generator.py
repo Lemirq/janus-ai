@@ -69,6 +69,55 @@ class AudioGenerator:
             print(f"Audio generation error: {e}")
             # Fallback to simple generation
             return await self.generate_simple(text, voice_profile)
+    
+    async def generate_streaming(self,
+                                text: str,
+                                prosody_tokens: List[int],
+                                voice_profile: str = "en_woman"):
+        """
+        Generate audio with streaming support
+        Yields audio chunks as they're generated
+        """
+        # Get reference audio for voice
+        reference_audio, reference_text = await self._get_reference_audio(voice_profile)
+        
+        # Build messages with prosody context
+        messages = self._build_prosody_messages(
+            text, prosody_tokens, reference_audio, reference_text
+        )
+        
+        try:
+            # Try streaming if supported by API
+            response = await self.client.chat.completions.create(
+                model=self.config.generation_model,
+                messages=messages,
+                modalities=["text", "audio"],
+                max_completion_tokens=4096,
+                temperature=0.8,
+                top_p=0.95,
+                stream=True,  # Enable streaming
+                stop=["<|eot_id|>", "<|end_of_text|>", "<|audio_eos|>"],
+                extra_body={"top_k": 50}
+            )
+            
+            # Stream audio chunks
+            async for chunk in response:
+                if hasattr(chunk.choices[0], 'delta') and hasattr(chunk.choices[0].delta, 'audio'):
+                    if chunk.choices[0].delta.audio:
+                        audio_b64 = chunk.choices[0].delta.audio.data
+                        if audio_b64:
+                            audio_chunk = base64.b64decode(audio_b64)
+                            yield audio_chunk
+                            
+        except Exception as e:
+            print(f"[INFO] Streaming not available, falling back to batch generation")
+            # Fallback to non-streaming
+            audio_data = await self.generate(text, prosody_tokens, voice_profile)
+            # Yield in chunks
+            chunk_size = 24000 * 2  # 1 second chunks
+            for i in range(0, len(audio_data), chunk_size):
+                yield audio_data[i:i + chunk_size]
+                await asyncio.sleep(0.01)  # Small delay for streaming effect
             
     async def generate_simple(self, text: str, voice: str = "en_woman") -> bytes:
         """Simple audio generation without complex prosody"""
@@ -237,6 +286,96 @@ Professional setting, clear audio quality.
             wav.setsampwidth(self.sample_width)
             wav.setframerate(self.sample_rate)
             wav.writeframes(audio_data)
+    
+    async def save_streaming_to_file(self, audio_stream, filename: str):
+        """
+        Save streaming audio chunks progressively
+        Creates individual chunk files during generation, then combines and cleans up
+        
+        Progress:
+        - Saves chunks to: output/streaming/chunk_001.wav, chunk_002.wav, ...
+        - Saves final to: output/response.wav
+        - Deletes chunk files when done
+        """
+        from pathlib import Path
+        import os
+        import glob
+        
+        # Create streaming folder
+        output_dir = Path(filename).parent
+        streaming_dir = output_dir / "streaming"
+        streaming_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Clean up any old streaming chunks
+        old_chunks = glob.glob(str(streaming_dir / "chunk_*.wav"))
+        for old_chunk in old_chunks:
+            try:
+                os.remove(old_chunk)
+            except:
+                pass
+        
+        # Open main WAV file for final output
+        wav_file = wave.open(filename, 'wb')
+        wav_file.setnchannels(self.num_channels)
+        wav_file.setsampwidth(self.sample_width)
+        wav_file.setframerate(self.sample_rate)
+        
+        total_frames = 0
+        chunk_count = 0
+        chunk_files = []
+        
+        try:
+            print(f"[STREAMING] Generating audio chunks...")
+            print(f"  Saving chunks to: {streaming_dir}/")
+            
+            async for audio_chunk in audio_stream:
+                if audio_chunk and len(audio_chunk) > 0:
+                    chunk_count += 1
+                    
+                    # Save individual chunk file
+                    chunk_filename = streaming_dir / f"chunk_{chunk_count:03d}.wav"
+                    chunk_files.append(chunk_filename)
+                    
+                    # Write chunk as individual WAV file
+                    with wave.open(str(chunk_filename), 'wb') as chunk_wav:
+                        chunk_wav.setnchannels(self.num_channels)
+                        chunk_wav.setsampwidth(self.sample_width)
+                        chunk_wav.setframerate(self.sample_rate)
+                        chunk_wav.writeframes(audio_chunk)
+                    
+                    # Also write to main file
+                    wav_file.writeframes(audio_chunk)
+                    
+                    total_frames += len(audio_chunk) // self.sample_width
+                    duration = total_frames / self.sample_rate
+                    
+                    # Show progress
+                    print(f"  [Chunk {chunk_count:03d}] {duration:.1f}s | {chunk_filename.name}", end='\r')
+            
+            # Final status
+            final_duration = total_frames / self.sample_rate
+            print(f"\n[GENERATED] {final_duration:.1f}s total in {chunk_count} chunks")
+            
+        finally:
+            wav_file.close()
+        
+        # Clean up streaming chunks
+        print(f"[CLEANUP] Removing temporary chunk files...")
+        for chunk_file in chunk_files:
+            try:
+                os.remove(chunk_file)
+            except Exception as e:
+                pass
+        
+        # Remove streaming directory if empty
+        try:
+            streaming_dir.rmdir()
+        except:
+            pass
+        
+        print(f"[COMPLETE] Final audio saved to: {filename}")
+        
+        return filename
             
     def combine_audio_segments(self, segments: List[bytes]) -> bytes:
         """Combine multiple audio segments"""
