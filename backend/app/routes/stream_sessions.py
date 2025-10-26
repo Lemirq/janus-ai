@@ -10,6 +10,7 @@ from datetime import datetime
 from flask import Blueprint, Response, request, stream_with_context
 from collections import deque
 from .sessions import _session_path
+from ..transcription_service import WhisperTranscriptionService
 
 bp = Blueprint('stream_sessions', __name__)
 
@@ -29,6 +30,9 @@ _session_audio_streams = {}
 
 # Track latency statistics per session
 _latency_stats = {}  # {session_id: {'min': ms, 'max': ms, 'sum': ms, 'count': n}}
+
+# Track transcription services per session
+_transcription_services = {}  # {session_id: WhisperTranscriptionService}
 
 @bp.route('/sessions/<session_id>/upload_audio', methods=['POST'])
 def upload_audio_chunk(session_id):
@@ -74,6 +78,27 @@ def upload_audio_chunk(session_id):
         
         print(f"[stream_sessions] Created packet directory: {packet_dir}")
         
+        # Initialize transcription service for this session
+        # Ensure transcripts are stored under backend/data/sessions
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))  # .../backend
+        data_dir = os.path.join(project_root, 'data', 'sessions')
+        os.makedirs(data_dir, exist_ok=True)
+        # path: backend/data/sessions/sess_<id>_transcript.txt
+        transcript_path = os.path.join(data_dir, f'{session_id}_transcript.txt')
+        
+        try:
+            transcription_service = WhisperTranscriptionService(
+                session_id=session_id,
+                packet_dir=packet_dir,
+                transcript_path=transcript_path,
+                packets_per_transcription=75,  # kept for compatibility
+                chunks_per_file=50  # write 50 packets per WAV, transcribe, delete, loop
+            )
+            _transcription_services[session_id] = transcription_service
+            print(f"[stream_sessions] Initialized transcription service for {session_id}")
+        except Exception as e:
+            print(f"[stream_sessions] Error initializing transcription service: {e}")
+        
         # Initialize audio output stream for playback through speakers
         try:
             audio_stream = sd.OutputStream(
@@ -94,6 +119,15 @@ def upload_audio_chunk(session_id):
     
     # Add to buffer
     _session_audio_buffers[session_id].append(pcm_data)
+    
+    # Add packet to transcription service
+    if session_id in _transcription_services:
+        try:
+            transcript = _transcription_services[session_id].add_packet(pcm_data)
+            if transcript:
+                print(f"[stream_sessions] Transcription update: {transcript[:100]}...")
+        except Exception as e:
+            print(f"[stream_sessions] Error adding packet to transcription: {e}")
     
     # Update latency statistics
     stats = _latency_stats[session_id]
@@ -238,6 +272,22 @@ def stop_stream(session_id):
     if session_id in _session_states:
         _session_states[session_id]['streaming'] = False
     
+    # Finalize transcription (transcribe remaining audio)
+    if session_id in _transcription_services:
+        try:
+            transcription_service = _transcription_services[session_id]
+            final_transcript = transcription_service.finalize()
+            if final_transcript:
+                print(f"[stream_sessions] Final transcription: {final_transcript[:100]}...")
+            
+            stats = transcription_service.get_stats()
+            print(f"[stream_sessions] Transcription complete: {stats['duration_seconds']:.2f}s transcribed")
+            print(f"[stream_sessions] Transcript saved to: {stats['transcript_path']}")
+            
+            del _transcription_services[session_id]
+        except Exception as e:
+            print(f"[stream_sessions] Error finalizing transcription: {e}")
+    
     # Clean up packet directory reference
     if session_id in _session_packet_dirs:
         packet_dir = _session_packet_dirs[session_id]
@@ -272,6 +322,6 @@ def stop_stream(session_id):
             avg_latency = stats['sum'] / stats['count']
             print(f"[stream_sessions] Latency stats for {session_id}: avg={avg_latency:.1f}ms, min={stats['min']}ms, max={stats['max']}ms, samples={stats['count']}")
         del _latency_stats[session_id]
-    
+
     return {"status": "stopped"}, 200
 
