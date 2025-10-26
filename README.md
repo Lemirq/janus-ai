@@ -18,6 +18,6 @@ Janus is the union of AI and Human, a double-headed intelligent being with effor
 
 **Real-Time Web Search:** Janus searches the web for relevant information in real time, without requiring prompts from the user. This lets you focus on the conversation or task at hand, while Janus looks for information to help you get the job done. 
 
-**RAG** Janus uses retrieval-augmented generation (RAG) to fetch important documents quickly and accurately. Need a figure from this quarter's financial report? No problem. Just upload the file in advance, and Janus will tell you the facts when you need them. 
+**RAG:** Janus uses retrieval-augmented generation (RAG) to fetch important documents quickly and accurately. Need a figure from this quarter's financial report? No problem. Just upload the file in advance, and Janus will tell you the facts when you need them. 
 
 **Native iOS App:** We built Janus as a native app for iOS, avoiding the hassle of mobile web UIs. 
