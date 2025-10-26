@@ -1,5 +1,7 @@
 # Janus AI
 
+![](https://github.com/janus-ai/janus.gif)
+
 ## Overview
 
 Say goodbye to prompt engineering.
