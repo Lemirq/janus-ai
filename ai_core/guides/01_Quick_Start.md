@@ -1,10 +1,23 @@
 # Janus AI - Quick Start Guide
 
-## 🚀 Run in 30 Seconds
+## ⚡ Get Best Quality (5 minutes) - RECOMMENDED
+
+**Download pre-trained model** for 85%+ prosody consistency:
+
+1. **Download**: [Pre-trained model](https://drive.google.com/file/d/18uoP8ecfsCwDTEdTJZKzwhGTulTSoTsb/view?usp=sharing) (~180 MB)
+2. **Create folder**: `ai_core/fine_tuning/models/`
+3. **Extract ZIP** into the models folder
+4. **Done!** Model loads automatically
+
+**See**: `../fine_tuning/DOWNLOAD_MODEL.md` for detailed instructions
+
+---
+
+## 🚀 Or Use API (30 seconds, lower quality)
 
 ```powershell
 # 1. Set API key
-$env:BOSON_API_KEY="bai-ze8Ed2o8AC3RT9vee4WgeL384vpmTo_HnQZMzz3Xt4kdmBFB"
+$env:BOSON_API_KEY="your-api-key"
 
 # 2. Generate response
 python main.py -i "How much?" -p "30% savings" "No fees"
@@ -12,6 +25,8 @@ python main.py -i "How much?" -p "30% savings" "No fees"
 # 3. Listen to output
 start output/response.wav
 ```
+
+**Note**: Without the pre-trained model, prosody is only 30-50% consistent
 
 ---
 

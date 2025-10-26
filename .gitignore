@@ -10,4 +10,22 @@ backend/uploads/
 /ai_core/fine_tuning/jre_training_audio.wav/
 /ai_core/__pycache__/
 /ai_core/fine_tuning/__pycache__/
-/ai_core/fine_tuning/models/
+
+# Training outputs and checkpoints (TOO LARGE FOR GITHUB)
+ai_core/fine_tuning/models/
+ai_core/fine_tuning/training_data/
+ai_core/output/
+ai_core/demo_output/
+ai_core/output_audio/
+
+# Model weights (>100MB each)
+*.safetensors
+*.pt
+*.pth
+*.bin
+
+# Audio files (can be large)
+*.wav
+
+# Compressed archives
+ai_core/fine_tuning/*.zip

@@ -2,19 +2,31 @@
 
 ## Choose Your Path
 
-### Path A: Use Immediately ⚡
+### Path A: Download Pre-Trained Model ⚡ **RECOMMENDED**
+```
+1. Download: https://drive.google.com/file/d/18uoP8ecfsCwDTEdTJZKzwhGTulTSoTsb/view?usp=sharing
+2. Create: ai_core/fine_tuning/models/ folder
+3. Extract: ZIP into models/ folder
+4. Use: python main.py --interactive
+```
+**Prosody**: 85-95% consistent (production quality)  
+**Time**: 5 minutes setup  
+**Read**: `../fine_tuning/DOWNLOAD_MODEL.md` (complete instructions)
+
+### Path B: Use API Only (No Download)
 ```powershell
 python main.py --interactive
 ```
-**Prosody**: 30-50% consistent (good for testing)  
+**Prosody**: 30-50% consistent (testing only)  
+**Time**: Instant  
 **Read**: `01_Quick_Start.md` (2 min)
 
-### Path B: Train First 🎓
+### Path C: Train Your Own Model 🎓
 ```powershell
 cd fine_tuning
 python 1_segment_audio.py
 ```
-**Prosody**: 85-95% consistent (production quality)  
+**Prosody**: 85-95% consistent (customized)  
 **Time**: 1.5-2 hours on RTX 4050  
 **Read**: `02_Fine_Tuning_LoRA.md` (5 min)
 
