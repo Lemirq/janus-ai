@@ -90,7 +90,7 @@ Consider:
 1. Are we making progress toward the objective?
 2. What opportunities does this exchange present?
 3. Should we pivot the conversation?
-4. What's the most persuasive next step?"""
+4. What's the most persuasive next step toward our goals?"""
 
         try:
             response = await self.client.chat.completions.create(
