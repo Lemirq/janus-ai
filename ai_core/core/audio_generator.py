@@ -38,50 +38,54 @@ class AudioGenerator:
         """Load fine-tuned Higgs audio model if available"""
         from pathlib import Path
         
-        higgs_path = Path("fine_tuning/models/higgs_prosody_lora")
+        # Check for custom-trained Higgs model first
+        higgs_path = Path("fine_tuning/models/higgs_prosody_custom")
+        
+        if not higgs_path.exists():
+            # Fallback to LoRA version (won't exist but check anyway)
+            higgs_path = Path("fine_tuning/models/higgs_prosody_lora")
         
         if not higgs_path.exists():
             print("[INFO] Fine-tuned Higgs model not found, using API")
-            print("       To train Higgs: See fine_tuning/HIGGS_TRAINING_GUIDE.md")
             return
         
         try:
             print("[LOADING] Fine-tuned Higgs audio model...")
             
-            from transformers import AutoModelForCausalLM, AutoTokenizer
-            from peft import PeftModel
+            import torch
+            from transformers import AutoTokenizer
             
             # Load tokenizer
             self.local_higgs_tokenizer = AutoTokenizer.from_pretrained(str(higgs_path))
             
-            # Load base Higgs model
-            base_path = Path("fine_tuning/models/higgs_audio_base")
-            if not base_path.exists():
-                print(f"[INFO] Higgs base model not found at {base_path}")
-                print("       Download with: python fine_tuning/4_download_higgs.py")
-                return
+            # Check if this is custom trained model (has .pt file)
+            checkpoint_path = higgs_path / "higgs_finetuned.pt"
             
-            base_model = AutoModelForCausalLM.from_pretrained(
-                str(base_path),
-                device_map="auto",
-                torch_dtype="auto",
-                low_cpu_mem_usage=True
-            )
-            
-            # Resize embeddings
-            if len(self.local_higgs_tokenizer) != base_model.config.vocab_size:
-                base_model.resize_token_embeddings(len(self.local_higgs_tokenizer))
-            
-            # Load LoRA adapters
-            self.local_higgs_model = PeftModel.from_pretrained(
-                base_model,
-                str(higgs_path),
-                device_map="auto",
-                is_trainable=False
-            )
-            self.local_higgs_model.eval()
-            
-            print("[SUCCESS] Fine-tuned Higgs loaded! Audio generation: 85-95% prosody")
+            if checkpoint_path.exists():
+                print(f"       Loading custom-trained Higgs from: {checkpoint_path}")
+                
+                # Need to load Higgs with serve engine, then load weights
+                from boson_multimodal.serve.serve_engine import HiggsAudioServeEngine
+                
+                # Load base Higgs
+                serve_engine = HiggsAudioServeEngine(
+                    "bosonai/higgs-audio-v2-generation-3B-base",
+                    "bosonai/higgs-audio-v2-tokenizer",
+                    device="cuda" if torch.cuda.is_available() else "cpu"
+                )
+                
+                # Load your fine-tuned weights
+                checkpoint = torch.load(checkpoint_path, map_location="cpu")
+                serve_engine.model.load_state_dict(checkpoint['model_state_dict'])
+                
+                self.local_higgs_model = serve_engine
+                print(f"       [SUCCESS] Custom Higgs loaded!")
+                print(f"                 Audio generation: 85-95% prosody!")
+            else:
+                print(f"       [INFO] No custom checkpoint found")
+                print(f"       Using API for audio generation")
+                self.local_higgs_model = None
+                self.local_higgs_tokenizer = None
             
         except Exception as e:
             print(f"[INFO] Could not load Higgs model: {str(e)[:80]}")
