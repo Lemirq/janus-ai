@@ -38,7 +38,7 @@ class SentimentAnalyzer:
         context = self._build_context(history[-5:])  # Last 5 exchanges
         
         # Use reasoning model for deep analysis
-        prompt = f"""Analyze this conversation segment for persuasion context:
+        prompt_dict = {"english": """Analyze this conversation segment for persuasion context:
 
 Recent context:
 {context}
@@ -62,7 +62,33 @@ Focus on identifying:
 2. Objections or concerns, which may be obstacles to the persuasive goal
 3. Indicators of interest
 4. Changes in sentiment or emotional state
-5. Topics that relate concretely to persuasion objectives"""
+5. Topics that relate concretely to persuasion objectives""",
+                      "french": """Analyser ce segment de conversation dans le contexte de la persuasion :
+
+Contexte récent :
+{context}
+
+Déclaration actuelle : "{transcript}"
+
+Fournir l'analyse au format JSON :
+{{
+    "sentiment": "positif/négatif/neutre/questionnant",
+    "est_une_question": true/false,
+    "type_de_question": "clarification/objection/intérêt/technique" ou null,
+    "préoccupations_détectées": ["liste des préoccupations"],
+    "état_émotionnel": "engagé/sceptique/intéressé/résistant",
+    "réponse_nécessaire": true/false,
+    "question_complexe": true/false,
+    "sujets_clés": ["sujets pertinents mentionnés"]
+}}
+
+Concentrez-vous sur l'identification de :
+1. Les questions critiques pour atteindre l'objectif persuasif
+2. Les objections ou préoccupations, qui peuvent être des obstacles à l'objectif persuasif
+3. Les indicateurs d'intérêt
+4. Les changements de sentiment ou d'état émotionnel
+5. Les sujets qui se rapportent concrètement aux objectifs de persuasion
+"""}
 
         try:
             response = await self.client.chat.completions.create(
