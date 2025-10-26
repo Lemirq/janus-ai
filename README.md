@@ -12,6 +12,12 @@ Janus is the union of AI and Human, a double-headed intelligent being with effor
 
 **Bilingual:** Janus has fully native support for both English and French. 
 
-**Hardware Integration:** Janus reads accelerometer data to track gesture commands in real time, allowing fine-grained control with no text or voice commands. 
+**Hardware Integration:** Janus reads accelerometer and gyroscope data to track gesture commands in real time, allowing fine-grained control with no text or voice commands. 
 
-**Native iOS App** We implemented Janus as a native app for iOS.
+**Direct Prosody Injection:** We leveraged Higgs' DualFFN architecture to inject prosody tokens directly into the audio stream. This allows the model to process prosody cues directly, instead of relying on the underlying Llama model, which is less specialized for this task. 
+
+**Real-Time Web Search:** Janus searches the web for relevant information in real time, without requiring prompts from the user. This lets you focus on the conversation or task at hand, while Janus looks for information to help you get the job done. 
+
+**RAG** Janus uses retrieval-augmented generation (RAG) to fetch important documents quickly and accurately. Need a figure from this quarter's financial report? No problem. Just upload the file in advance, and Janus will tell you the facts when you need them. 
+
+**Native iOS App:** We built Janus as a native app for iOS, avoiding the hassle of mobile web UIs. 
