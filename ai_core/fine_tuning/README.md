@@ -1,6 +1,40 @@
 # Fine-Tuning Setup - Complete Guide
 
-## 🚀 Quick Setup (RTX 4050)
+## ⚡ OPTION 1: Use Pre-Trained Model (Recommended)
+
+### Download and Install (5 minutes)
+
+**Skip the 2-hour training** and use the pre-trained model:
+
+```powershell
+# Step 1: Create models folder
+cd C:\Users\<your-username>\...\janus-ai\ai_core\fine_tuning
+mkdir models
+
+# Step 2: Download pre-trained model
+```
+
+**Download from Google Drive**: [janus_prosody_lora.zip](https://drive.google.com/file/d/18uoP8ecfsCwDTEdTJZKzwhGTulTSoTsb/view?usp=sharing)
+
+```powershell
+# Step 3: Extract ZIP into the models folder
+# Right-click the ZIP → Extract All → Select fine_tuning/models/
+
+# Or PowerShell:
+Expand-Archive -Path janus_prosody_lora.zip -DestinationPath models/
+
+# Step 4: Verify structure
+dir models\janus_prosody_lora
+# Should show: adapter_model.safetensors, adapter_config.json, etc.
+```
+
+**That's it!** The trained model is ready to use.
+
+---
+
+## 🔧 OPTION 2: Train From Scratch (Advanced)
+
+### Full Training Setup (RTX 4050: ~2 hours total)
 
 ### Install Dependencies
 
