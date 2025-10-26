@@ -86,7 +86,7 @@ class ResponseGenerator:
                               alignment: 'AlignmentAnalysis',
                               objective: 'PersuasionObjective',
                               history: List[Dict],
-                              language: str) -> str:
+                              language="english") -> str:
         """Build comprehensive prompt for response generation"""
         
         # Get recent context
