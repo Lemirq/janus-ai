@@ -14,6 +14,9 @@ dependencies = [
   "audioop-lts",
   "sounddevice",
   "numpy",
+  "huggingface_hub>=0.24.0",
+  "openai>=1.52.0",
+  "ai-core @ file:///Users/vs/Coding/janus-ai/ai_core",
 ]
 
 [build-system]
@@ -23,6 +26,9 @@ build-backend = "hatchling.build"
 [tool.uv]
 # cache-dir = ".uv-cache"
 # python-preference = "only-managed"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["app"]

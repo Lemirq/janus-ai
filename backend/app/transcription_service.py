@@ -13,6 +13,9 @@ import numpy as np
 from typing import Optional
 from huggingface_hub import InferenceClient
 
+# Global transcript accumulator (consumed by the AI model)
+T: str = ""
+_T_LOCK = threading.Lock()
 
 class WhisperTranscriptionService:
     """Handles real-time transcription using Whisper large-v3-turbo"""
@@ -67,8 +70,7 @@ class WhisperTranscriptionService:
         with open(self.transcript_path, 'w', encoding='utf-8') as f:
             f.write(f"# Transcript for session {session_id}\n\n")
         
-        print(f"[Transcription] Initialized for session {session_id}")
-        print(f"[Transcription] Transcript: {self.transcript_path}")
+        print(f"[TRX] init {session_id} -> {os.path.basename(self.transcript_path)}")
     
     def _write_wav_chunk(self, pcm_bytes: bytes) -> str:
         """Write a WAV file for the current chunk buffer and return its path."""
@@ -80,7 +82,7 @@ class WhisperTranscriptionService:
             wav.setsampwidth(self.sample_width)
             wav.setframerate(self.sample_rate)
             wav.writeframes(pcm_bytes)
-        print(f"[Transcription] Wrote WAV chunk: {wav_path}")
+        print(f"[TRX] chunk {os.path.basename(wav_path)} size={len(pcm_bytes)}")
         return wav_path
 
     def _transcription_worker(self):
@@ -93,30 +95,42 @@ class WhisperTranscriptionService:
             try:
                 transcript = self._transcribe_wav_file(wav_path)
                 if transcript:
-                    with open(self.transcript_path, 'a', encoding='utf-8') as f:
-                        f.write(transcript + " ")
+                    self._append_transcript_text(transcript)
             except Exception as e:
-                print(f"[Transcription] Worker error: {e}")
+                print(f"[TRX] worker_err {type(e).__name__}: {str(e)[:120]}")
             finally:
                 try:
                     if os.path.exists(wav_path):
                         os.remove(wav_path)
-                        print(f"[Transcription] Deleted WAV chunk: {wav_path}")
+                        print(f"[TRX] del {os.path.basename(wav_path)}")
                 except Exception as e:
-                    print(f"[Transcription] Warning: failed to delete chunk file {wav_path}: {e}")
+                    print(f"[TRX] del_warn {os.path.basename(wav_path)}: {str(e)[:100]}")
                 self._task_queue.task_done()
     
     def _get_pipeline(self):
         """Lazy init Hugging Face Inference client on first use"""
         if self._pipe is None:
-            print(f"[Transcription] Initializing HF Inference client...")
+            print(f"[TRX] hf_init")
             hf_token = os.environ.get("HF_TOKEN")
             if not hf_token:
-                print("[Transcription] Warning: HF_TOKEN not set; client init may fail")
+                print("[TRX] hf_warn no_token")
             self._pipe = InferenceClient(provider="hf-inference", api_key=hf_token)
             self._model_loaded = True
-            print(f"[Transcription] HF Inference client initialized")
+            print(f"[TRX] hf_ready")
         return self._pipe
+
+    def _append_transcript_text(self, text: str) -> None:
+        """Append transcribed text to both the file and global T safely."""
+        if not text:
+            return
+        with open(self.transcript_path, 'a', encoding='utf-8') as f:
+            f.write(text + " ")
+        global T
+        with _T_LOCK:
+            if T:
+                T = (T + " " + text).strip()
+            else:
+                T = text.strip()
     
     def add_packet(self, pcm_data: bytes) -> Optional[str]:
         """
@@ -163,7 +177,8 @@ class WhisperTranscriptionService:
                 ):
                     print(f"[Transcription] Warning: WAV params mismatch for {wav_path}")
             client = self._get_pipeline()
-            print(f"[Transcription] Sending chunk to HF Inference: {os.path.basename(wav_path)}")
+            name = os.path.basename(wav_path)
+            print(f"[TRX] hf_req {name}")
             result = client.automatic_speech_recognition(
                 wav_path,
                 model="openai/whisper-large-v3-turbo"
@@ -175,12 +190,12 @@ class WhisperTranscriptionService:
             else:
                 transcript_text = (str(result) or "").strip()
             if transcript_text:
-                print(f"[Transcription] Result: {transcript_text}")
+                print(f"[TRX] hf_res {name} -> '{transcript_text[:48]}{'…' if len(transcript_text)>48 else ''}'")
                 return transcript_text
-            print(f"[Transcription] No speech detected in chunk {os.path.basename(wav_path)}")
+            print(f"[TRX] hf_res_empty {name}")
             return None
         except Exception as e:
-            print(f"[Transcription] Error during transcription of {wav_path}: {e}")
+            print(f"[TRX] hf_err {os.path.basename(wav_path)} {type(e).__name__}: {str(e)[:140]}")
             return None
     
     def finalize(self) -> Optional[str]:
@@ -190,11 +205,11 @@ class WhisperTranscriptionService:
         Returns:
             Final transcribed text or None
         """
-        print(f"[Transcription] Finalizing session {self.session_id}...")
+        print(f"[TRX] finalize {self.session_id}")
         
         # If there is remaining audio, write a final chunk and enqueue
         if self.packet_buffer:
-            print(f"[Transcription] Enqueuing {self.packet_count} remaining packets for final transcription...")
+            print(f"[TRX] enqueue_rem {self.packet_count}")
             combined_pcm = b''.join(self.packet_buffer)
             wav_path = self._write_wav_chunk(combined_pcm)
             self.packet_buffer.clear()
@@ -214,8 +229,7 @@ class WhisperTranscriptionService:
         # No full-session WAV to close
         
         transcript_size = os.path.getsize(self.transcript_path)
-        print(f"[Transcription] Transcript saved: {transcript_size} bytes")
-        print(f"[Transcription] Session {self.session_id} transcription complete")
+        print(f"[TRX] done size={transcript_size}")
         
         return None
     

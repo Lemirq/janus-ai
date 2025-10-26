@@ -491,6 +491,7 @@ Examples:
     parser.add_argument('-p', '--points', nargs='+', help='Your talking points')
     parser.add_argument('-o', '--output', type=str, default='output/response.wav', help='Output file')
     parser.add_argument('--interactive', action='store_true', help='Interactive mode')
+    parser.add_argument('--from-session', type=str, help='Session ID to pull transcript from backend/data/sessions')
     
     # Legacy demo mode arguments  
     parser.add_argument('--mode', choices=['demo', 'live'], help='[DEPRECATED] Use -i/-p instead')
@@ -535,6 +536,20 @@ Examples:
     elif args.input and args.points:
         # Single response mode
         await generate_single_response(janus, args.input, args.points, args.output)
+    elif args.from_session:
+        # Generate from backend transcript file
+        sess_id = args.from_session.strip()
+        backend_sessions_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'backend', 'data', 'sessions'))
+        transcript_path = os.path.join(backend_sessions_dir, f"{sess_id}_transcript.txt")
+        if not os.path.exists(transcript_path):
+            print(f"\n[ERROR] Transcript not found: {transcript_path}")
+            return
+        with open(transcript_path, 'r', encoding='utf-8') as f:
+            transcript_text = f.read().strip()
+        # Fallback points if not provided
+        points = args.points or ["value", "trust", "results"]
+        print(f"\n[TRANSCRIPT] Loaded from {transcript_path} ({len(transcript_text)} chars)")
+        await generate_single_response(janus, transcript_text, points, args.output)
     elif args.mode == 'demo':
         # Legacy demo mode
         objective = PersuasionObjective(
