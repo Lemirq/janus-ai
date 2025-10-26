@@ -31,7 +31,7 @@ class SentimentAnalyzer:
             base_url=config.base_url
         )
         
-    async def analyze(self, transcript: str, history: List[Dict], language: str) -> ConversationAnalysis:
+    async def analyze(self, transcript: str, history: List[Dict], language="english") -> ConversationAnalysis:
         """Analyze transcript for sentiment, questions, and conversation dynamics"""
         
         # Build context from history
