@@ -26,9 +26,11 @@ ai_core/output_audio/
 
 # Audio files (can be large)
 *.wav
+.env
 
 # Compressed archives
 ai_core/fine_tuning/*.zip
 *.xcuserstate
 *.gitignore
 backend/.env
+backend/app/uploads/*

@@ -1,6 +1,9 @@
 import uuid
 from flask import Blueprint, request, jsonify
 from ..vectorstore import get_collection
+from .sessions import _session_path
+import os
+import json
 
 
 bp = Blueprint("ingest", __name__)
@@ -38,6 +41,24 @@ def ingest():
         col.add(documents=texts, ids=ids, metadatas=metadatas)
     else:
         col.add(documents=texts, ids=ids)
+
+    # Persist file IDs to the session JSON for later retrieval
+    if session_id:
+        try:
+            sess_path = _session_path(session_id)
+            if os.path.exists(sess_path):
+                with open(sess_path, 'r') as f:
+                    sess = json.load(f)
+                existing = set(sess.get("fileIds") or [])
+                for _id in ids:
+                    existing.add(_id)
+                sess["fileIds"] = list(existing)
+                with open(sess_path, 'w') as f:
+                    json.dump(sess, f)
+        except Exception:
+            # Non-fatal if session file missing or invalid
+            pass
+
     return jsonify({"added": len(texts), "ids": ids})
 
 

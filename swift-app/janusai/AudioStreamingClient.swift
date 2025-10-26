@@ -19,14 +19,14 @@ final class AudioStreamingClient: NSObject, ObservableObject {
     private let audioEngine = AVAudioEngine()
     private let playerNode = AVAudioPlayerNode()
     private let varispeed = AVAudioUnitVarispeed()
-    // Source format of incoming PCM from server
-    private var sourcePCM16_24k: AVAudioFormat!
+    private var audioFormat24k: AVAudioFormat!
     private var tapInstalled: Bool = false
     
     // HTTP streaming tasks
     private var uploadTask: URLSessionTask?
     private var downloadTask: URLSessionDataTask?
     private var sessionId: String = ""
+    private var settingsCancellable: AnyCancellable?
     
     // Upload queue for captured audio
     private let uploadQueue = DispatchQueue(label: "AudioStreamingClient.upload")
@@ -44,14 +44,11 @@ final class AudioStreamingClient: NSObject, ObservableObject {
         config.timeoutIntervalForRequest = 3600  // 1 hour timeout for streaming
         config.timeoutIntervalForResource = 3600
         urlSession = URLSession(configuration: config, delegate: self, delegateQueue: nil)
-        // Incoming server stream is PCM16 mono @ 24 kHz
-        // We'll convert to the engine's node format before scheduling
-        sourcePCM16_24k = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 24_000, channels: 1, interleaved: false)
+        audioFormat24k = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 24_000, channels: 1, interleaved: true)
         audioEngine.attach(playerNode)
         audioEngine.attach(varispeed)
-        // Let the engine negotiate formats to avoid unsupported format errors (-10868)
-        audioEngine.connect(playerNode, to: varispeed, format: nil)
-        audioEngine.connect(varispeed, to: audioEngine.mainMixerNode, format: nil)
+        audioEngine.connect(playerNode, to: varispeed, format: audioFormat24k)
+        audioEngine.connect(varispeed, to: audioEngine.mainMixerNode, format: audioFormat24k)
     }
 
     func start(sessionId: String, webSocketURL url: URL) {
@@ -197,7 +194,7 @@ final class AudioStreamingClient: NSObject, ObservableObject {
                     print("🎤 Captured buffer #\(self.captureCount), frames: \(buffer.frameLength)")
                 }
                 
-                if let data = Self.convertToPCM16Mono16k(buffer: buffer) {
+                if let data = Self.convertToPCM16Mono(buffer: buffer, sampleRate: 24_000) {
                     self.updateRMS(fromPCM16: data)
                     self.enqueueUpload(data)
                 }
@@ -208,7 +205,6 @@ final class AudioStreamingClient: NSObject, ObservableObject {
     }
 
     private func startPlayer() {
-        // This method is now a no-op - player is started in startCapture()
         // Kept for API compatibility
     }
 
@@ -291,10 +287,9 @@ final class AudioStreamingClient: NSObject, ObservableObject {
 
     // MARK: - Playback
     private func schedulePlayback(pcm16: Data) {
-        // Prepare source buffer (PCM16 mono @ 24k, non-interleaved)
-        let srcFrames = UInt32(pcm16.count / 2)
-        guard let srcBuf = AVAudioPCMBuffer(pcmFormat: sourcePCM16_24k, frameCapacity: srcFrames) else { return }
-        srcBuf.frameLength = srcFrames
+        let frameCount = UInt32(pcm16.count / 2)
+        guard let buf = AVAudioPCMBuffer(pcmFormat: audioFormat24k, frameCapacity: frameCount) else { return }
+        buf.frameLength = frameCount
         pcm16.withUnsafeBytes { raw in
             guard let srcBase = raw.baseAddress else { return }
             // Copy into channel 0 (non-interleaved)
@@ -339,39 +334,31 @@ final class AudioStreamingClient: NSObject, ObservableObject {
         DispatchQueue.main.async { self.rmsLevel = rms }
     }
 
-    static func convertToPCM16Mono16k(buffer: AVAudioPCMBuffer) -> Data? {
+    static func convertToPCM16Mono(buffer: AVAudioPCMBuffer, sampleRate: Double) -> Data? {
         let inputFormat = buffer.format
-        
-        guard let desiredFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, 
-                                                 sampleRate: 16_000, 
-                                                 channels: 1, 
+        guard let desiredFormat = AVAudioFormat(commonFormat: .pcmFormatInt16,
+                                                 sampleRate: sampleRate,
+                                                 channels: 1,
                                                  interleaved: true) else {
             return nil
         }
-        
         guard let converter = AVAudioConverter(from: inputFormat, to: desiredFormat) else {
             return nil
         }
-        
         let ratio = desiredFormat.sampleRate / inputFormat.sampleRate
         let outCapacity = AVAudioFrameCount(Double(buffer.frameLength) * ratio)
-        
         guard let outBuf = AVAudioPCMBuffer(pcmFormat: desiredFormat, frameCapacity: outCapacity) else {
             return nil
         }
-        
         var error: NSError?
         let inputBlock: AVAudioConverterInputBlock = { _, outStatus in
             outStatus.pointee = .haveData
             return buffer
         }
-        
         let status = converter.convert(to: outBuf, error: &error, withInputFrom: inputBlock)
-        
         guard status != .error, error == nil, let channelData = outBuf.int16ChannelData else {
             return nil
         }
-        
         let frameCount = Int(outBuf.frameLength)
         let bytes = UnsafeBufferPointer(start: channelData[0], count: frameCount)
         return Data(buffer: bytes)
@@ -428,7 +415,7 @@ private extension AudioStreamingClient {
         let session = AVAudioSession.sharedInstance()
         do {
             try session.setCategory(.playAndRecord, mode: .voiceChat, options: [.defaultToSpeaker, .allowBluetooth])
-            try session.setPreferredSampleRate(16_000)
+            try session.setPreferredSampleRate(24_000)
             try session.setPreferredIOBufferDuration(0.02)
             print("✅ Audio session configured")
         } catch {
@@ -448,5 +435,26 @@ private extension AudioStreamingClient {
             }
             DispatchQueue.main.async { completion(granted) }
         }
+    }
+}
+
+// MARK: - Settings-driven playback speed
+extension AudioStreamingClient {
+    func bindSettings(_ publisher: AnyPublisher<APIService.Settings, Never>) {
+        settingsCancellable?.cancel()
+        settingsCancellable = publisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] settings in
+                guard let self else { return }
+                // Map playbackSpeed -> varispeed.rate (1.0 = normal)
+                let rate: Float
+                switch settings.playbackSpeed.lowercased() {
+                case "slow": rate = 0.85
+                case "fast": rate = 1.25
+                default: rate = 1.0
+                }
+                self.varispeed.rate = rate
+                print("🎛️ Varispeed rate set to \(rate) for speed=\(settings.playbackSpeed)")
+            }
     }
 }

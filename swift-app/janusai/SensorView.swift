@@ -2,7 +2,7 @@
 //  SensorView.swift
 //  janusai
 //
-//  Created by Assistant on 2025-10-26.
+//  Created by Vihaan Sharma on 2025-10-26.
 //
 
 import SwiftUI

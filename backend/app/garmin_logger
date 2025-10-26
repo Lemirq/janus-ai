@@ -1,0 +1,78 @@
+import time
+import csv
+import requests
+import random  # For simulating accelerometer/gyro data in absence of real Garmin API data
+
+# Assuming you have already obtained an access token via OAuth2
+ACCESS_TOKEN = 'YOUR_ACCESS_TOKEN'  # Replace with your actual access token
+
+# Garmin Health API base URL (for real-time sensor data)
+BASE_URL = 'https://healthapi.garmin.com/v1/sensors'
+
+# Set up headers with Authorization (Bearer token)
+headers = {
+    'Authorization': f'Bearer {ACCESS_TOKEN}',
+    'Content-Type': 'application/json',
+}
+
+# File to store the real-time sensor data
+CSV_FILE = 'sensor_data.csv'
+
+# Set up CSV file writer (append mode for continuous logging)
+with open(CSV_FILE, mode='a', newline='') as file:
+    csv_writer = csv.writer(file)
+    # Write the header if it's a new file
+    csv_writer.writerow(['timestamp', 'accelerometer_x', 'accelerometer_y', 'accelerometer_z',
+                         'gyro_x', 'gyro_y', 'gyro_z'])
+
+
+# Function to simulate getting sensor data (replace with actual API calls to Garmin Health API)
+def get_sensor_data():
+    # Simulating accelerometer and gyro data in the absence of real Garmin API access
+    accelerometer_data = {
+        'x': random.uniform(-10, 10),  # Simulated accelerometer data (x-axis)
+        'y': random.uniform(-10, 10),  # Simulated accelerometer data (y-axis)
+        'z': random.uniform(-10, 10)  # Simulated accelerometer data (z-axis)
+    }
+
+    gyro_data = {
+        'x': random.uniform(-5, 5),  # Simulated gyro data (x-axis)
+        'y': random.uniform(-5, 5),  # Simulated gyro data (y-axis)
+        'z': random.uniform(-5, 5)  # Simulated gyro data (z-axis)
+    }
+
+    return accelerometer_data, gyro_data
+
+
+# Function to stream and log real-time data
+def stream_data():
+    try:
+        while True:
+            # Get sensor data (replace with actual API call)
+            accelerometer, gyro = get_sensor_data()
+
+            # Get current timestamp (for logging)
+            timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+
+            # Print to console
+            print(f"Timestamp: {timestamp}")
+            print(f"Accelerometer: X={accelerometer['x']}, Y={accelerometer['y']}, Z={accelerometer['z']}")
+            print(f"Gyroscope: X={gyro['x']}, Y={gyro['y']}, Z={gyro['z']}")
+
+            # Write to CSV file
+            with open(CSV_FILE, mode='a', newline='') as file:
+                csv_writer = csv.writer(file)
+                csv_writer.writerow([timestamp, accelerometer['x'], accelerometer['y'], accelerometer['z'],
+                                     gyro['x'], gyro['y'], gyro['z']])
+
+            # Sleep for a short time to simulate real-time streaming (e.g., 1 second)
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+        print("Streaming stopped.")
+
+
+# Start streaming data
+if __name__ == "__main__":
+    print("Starting real-time streaming of sensor data...")
+    stream_data()

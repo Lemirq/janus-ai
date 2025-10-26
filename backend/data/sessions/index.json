@@ -1,24 +1,6 @@
 {
   "sessions": [
     {
-      "id": "sess_c0f37dcc",
-      "objective": "Sell to a skeptical customer on a cold call",
-      "createdAt": "2025-10-26T17:52:37.640967Z",
-      "status": "running"
-    },
-    {
-      "id": "sess_8b9f6bc9",
-      "objective": "Sell to a skeptical customer on a cold call",
-      "createdAt": "2025-10-26T17:51:08.779538Z",
-      "status": "running"
-    },
-    {
-      "id": "sess_18eb1bfa",
-      "objective": "Sell to a skeptical customer on a cold call",
-      "createdAt": "2025-10-26T17:49:29.823863Z",
-      "status": "running"
-    },
-    {
       "id": "sess_4d01e9bb",
       "objective": "Sell to a skeptical customer on a cold call",
       "createdAt": "2025-10-26T14:38:51.879637Z",

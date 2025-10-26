@@ -1,0 +1,135 @@
+import asyncio
+import csv
+from bleak import BleakClient, BleakScanner
+from datetime import datetime
+
+# Set the device's address (this can be the device address or name)
+TARGET_DEVICE_NAME = "Amazfit Band 7"  # Replace with the correct name of your device
+TARGET_DEVICE_ADDRESS = "9B6271E8-5042-5840-254E-26805F57E79A"  # Optional, if you know the address
+
+CHARACTERISTIC_UUIDS = [
+    "00002a2b-0000-1000-8000-00805f9b34fb",  # accelerometer or similar characteristic
+    "00000016-0000-3512-2118-0009af100700",  # Another characteristic
+    "00000017-0000-3512-2118-0009af100700",  # Another characteristic
+    "00000001-0000-3512-2118-0009af100700",  # Accelerometer or similar
+    "00000002-0000-3512-2118-0009af100700",  # Accelerometer or similar
+    "00000004-0000-3512-2118-0009af100700",  # Accelerometer or similar
+]
+
+# Initialize CSV logging
+CSV_FILE = "accelerometer_data.csv"
+
+
+# Write the header row in the CSV file
+def write_csv_header():
+    with open(CSV_FILE, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        # Only write header if the file is empty (i.e., first run)
+        if file.tell() == 0:
+            writer.writerow(['timestamp', 'x', 'y', 'z', 'raw_data'])
+
+
+# Function to handle incoming data
+async def handle_data(sender, data: bytearray):
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Log raw data
+    raw_data = data.hex()
+    print(f"Notification received from {sender}: {raw_data}")  # Add debug log here
+
+    # Example: If data is accelerometer data, parse it
+    if len(data) >= 6:  # Assuming the data structure is consistent and 6 bytes for accelerometer
+        x = int.from_bytes(data[0:2], 'little', signed=True)
+        y = int.from_bytes(data[2:4], 'little', signed=True)
+        z = int.from_bytes(data[4:6], 'little', signed=True)
+        print(f"Accelerometer Data - X: {x}, Y: {y}, Z: {z}")
+
+        # Write to CSV file
+        with open(CSV_FILE, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([timestamp, x, y, z, raw_data])
+    else:
+        print(f"Unexpected data: {data}")
+        # Write to CSV for any unexpected data
+        with open(CSV_FILE, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([timestamp, 'N/A', 'N/A', 'N/A', raw_data])
+
+
+# Function to scan and connect to the device
+async def scan_and_connect():
+    print("Scanning for devices...")
+
+    # Scan for devices
+    devices = await BleakScanner.discover()
+    print("Discovered devices:")
+
+    # Check if the target device is in the list
+    target_device = None
+    for device in devices:
+        print(f"Name: {device.name}, Address: {device.address}")
+        if device.name == TARGET_DEVICE_NAME or device.address == TARGET_DEVICE_ADDRESS:
+            target_device = device
+            break
+
+    if not target_device:
+        print("Target device not found!")
+        return None
+
+    print(f"Found target device: {target_device.name}, Address: {target_device.address}")
+    return target_device.address
+
+
+# Main function
+async def main():
+    # Write the header row to CSV file if it doesn't exist
+    write_csv_header()
+
+    # Step 1: Discover and select the target device
+    device_address = await scan_and_connect()
+    if not device_address:
+        return  # Exit if the device is not found
+
+    # Step 2: Connect to the device and start receiving notifications
+    async with BleakClient(device_address) as client:
+        print(f"Connected: {client.is_connected}")
+
+        # Directly access the services from client.services
+        print("Available services and characteristics:")
+        # Subscribe to valid characteristics that support notifications
+        subscribed_characteristics = set()  # Keep track of already subscribed characteristics
+
+        for service in client.services:
+            for characteristic in service.characteristics:
+                if characteristic.uuid in CHARACTERISTIC_UUIDS and "notify" in characteristic.properties:
+                    if characteristic.uuid not in subscribed_characteristics:
+                        print(f"Subscribing to characteristic {characteristic.uuid}")
+                        await client.start_notify(characteristic, handle_data)
+                        print(f"Subscribed to {characteristic.uuid}")
+                        subscribed_characteristics.add(characteristic.uuid)
+                    else:
+                        print(f"Already subscribed to {characteristic.uuid}, skipping.")
+
+        # # Filter characteristics that support 'notify' and subscribe only to those
+        # for char in CHARACTERISTIC_UUIDS:
+        #     for service in client.services:
+        #         for characteristic in service.characteristics:
+        #             if characteristic.uuid == char and "notify" in characteristic.properties:
+        #                 try:
+        #                     print(f"Attempting to subscribe to {char}")
+        #                     await client.start_notify(char, handle_data)
+        #                     print(f"Subscribed to {char}")
+        #                 except Exception as e:
+        #                     print(f"Failed to subscribe to {char}: {e}")
+        #                 break
+        #         else:
+        #             continue
+        #         break
+
+        # Wait for data notifications indefinitely
+        print("Waiting for accelerometer data... Press Ctrl+C to stop.")
+        await asyncio.Event().wait()  # Block until an interrupt (Ctrl+C)
+
+
+# Run the script
+asyncio.run(main())

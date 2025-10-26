@@ -22,29 +22,26 @@ def create_app() -> Flask:
     app.register_blueprint(stream_sessions_bp, url_prefix="/api")
     app.register_blueprint(settings_bp, url_prefix="/api")
 
-    # Verbose HTTP logging
-    @app.before_request
-    def _log_request():
-        try:
-            body = request.get_data(cache=True) or b""
-            body_display = body.decode(errors="replace")
-            if len(body_display) > 2000:
-                body_display = body_display[:2000] + "...<truncated>"
-            print(f"[HTTP REQ] {request.method} {request.path} headers={dict(request.headers)} body={body_display}")
-        except Exception as e:
-            print(f"[HTTP REQ] {request.method} {request.path} <body read error: {e}>")
+    # # Concise single-line HTTP logging
+    # @app.before_request
+    # def _log_request():
+    #     try:
+    #         raw = request.get_data(cache=True) or b""
+    #         txt = (raw.decode(errors="replace") if raw else "")
+    #         preview = (txt[:80] + "…") if len(txt) > 80 else txt
+    #         print(f"[HTTP] {request.method} {request.path} req='{preview}' len={len(raw)}")
+    #     except Exception as e:
+    #         print(f"[HTTP] {request.method} {request.path} req=<error {e}>")
 
-    @app.after_request
-    def _log_response(response):
-        try:
-            data = response.get_data(as_text=True)
-            display = data if data is not None else ""
-            if len(display) > 2000:
-                display = display[:2000] + "...<truncated>"
-            print(f"[HTTP RES] {request.method} {request.path} status={response.status_code} body={display}")
-        except Exception as e:
-            print(f"[HTTP RES] {request.method} {request.path} <response read error: {e}>")
-        return response
+    # @app.after_request
+    # def _log_response(response):
+    #     try:
+    #         data = response.get_data(as_text=True) or ""
+    #         preview = (data[:80] + "…") if len(data) > 80 else data
+    #         print(f"[HTTP] {request.method} {request.path} {response.status_code} res='{preview}' len={len(data)}")
+    #     except Exception as e:
+    #         print(f"[HTTP] {request.method} {request.path} {response.status_code} res=<error {e}>")
+    #     return response
     return app
 
 

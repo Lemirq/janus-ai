@@ -1,9 +1,6 @@
 //
 //  NewSessionView.swift
 //  janusai
-//
-//  Created by Assistant on 2025-10-25.
-//
 
 import SwiftUI
 struct NewSessionView: View {
@@ -20,12 +17,12 @@ struct NewSessionView: View {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Objective description")
                     .font(.headline)
-                TextField("Describe your objective...", text: $objective, axis: .vertical)
+                TextField("What do you want to accomplish?", text: $objective, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .lineLimit(3...6)
                     .onAppear {
                         if objective.isEmpty {
-                            objective = "Sell to a skeptical customer on a cold call"
+                            objective = "Sell to a skeptical enterprise customer on a cold call"
                         }
                     }
                 Divider()
