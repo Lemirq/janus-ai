@@ -1,16 +1,10 @@
 # Janus AI
 
-## Objective
+## Overview
 
-Janus makes speakers more persuasive. It finds answers to questions in real time, generates optimal responses, and guides the user in persuasive delivery. Janus communicates with users via a bluetooth earpiece, monitoring conversations in real time and checking against predefined persuasion objectives to guide responses.
+Say goodbye to prompt engineering.
 
-## Jargon
-
-PO (Persuasion Objective):
-The main longer-term goal of the exchange (eg. signing a deal)
-
-(Points of Persuasion):
-Individual points on which to persuade the audience, in service of the PO.
+Janus is the union of AI and Human, a double-headed intelligent being with effortless access to the vast body of digital knowledge. Janus finds answers to questions in real time, generates optimal responses, and guides the user in persuasive delivery. For the user, the experience is simple and intuitive: simply talk as normal, and Janus provides useful information in real time, controlled by subtle gesture cues. From the second-person perspective, Janus is seamless. Janus communicates with users via a bluetooth earpiece, monitoring conversations in real time and checking against predefined persuasion objectives to guide responses.
 
 ## Flow of Data
 
