@@ -15,6 +15,10 @@ final class StreamAudioPlayer: ObservableObject {
     private var client = AudioStreamingClient()
     private var sessionId: String = ""
 
+    func apply(settings: APIService.Settings) {
+        client.bindSettings(Just(settings).eraseToAnyPublisher())
+    }
+
     func start(sessionId: String) {
         self.sessionId = sessionId
         client.start(sessionId: sessionId)
@@ -88,6 +92,22 @@ private extension SessionRunningView {
         do {
             try await APIService.shared.startSession(id: sessionId)
             player.start(sessionId: sessionId)
+            // Begin continuous motion tracking while session runs
+            sensorManager.currentSessionId = sessionId
+            sensorManager.startTracking()
+            // Bind playback speed to settings updates
+            // Poll settings every few seconds to update speed, or wire to your own publisher if available
+            // Simple polling here for demo
+            Task.detached { [weak player] in
+                while true {
+                    guard let player else { break }
+                    do {
+                        let settings = try await APIService.shared.getSettings()
+                        DispatchQueue.main.async { player.apply(settings: settings) }
+                    } catch {}
+                    try? await Task.sleep(nanoseconds: 3_000_000_000) // 3s
+                }
+            }
             await MainActor.run {
                 appState.startSession(sessionId)
             }

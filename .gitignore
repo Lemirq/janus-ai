@@ -29,3 +29,6 @@ ai_core/output_audio/
 
 # Compressed archives
 ai_core/fine_tuning/*.zip
+*.xcuserstate
+*.gitignore
+backend/.env

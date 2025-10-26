@@ -18,7 +18,9 @@ final class AudioStreamingClient: NSObject, ObservableObject {
     private var urlSession: URLSession!
     private let audioEngine = AVAudioEngine()
     private let playerNode = AVAudioPlayerNode()
-    private var audioFormat16k: AVAudioFormat!
+    private let varispeed = AVAudioUnitVarispeed()
+    // Source format of incoming PCM from server
+    private var sourcePCM16_24k: AVAudioFormat!
     private var tapInstalled: Bool = false
     
     // HTTP streaming tasks
@@ -42,9 +44,14 @@ final class AudioStreamingClient: NSObject, ObservableObject {
         config.timeoutIntervalForRequest = 3600  // 1 hour timeout for streaming
         config.timeoutIntervalForResource = 3600
         urlSession = URLSession(configuration: config, delegate: self, delegateQueue: nil)
-        audioFormat16k = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 16_000, channels: 1, interleaved: true)
+        // Incoming server stream is PCM16 mono @ 24 kHz
+        // We'll convert to the engine's node format before scheduling
+        sourcePCM16_24k = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 24_000, channels: 1, interleaved: false)
         audioEngine.attach(playerNode)
-        audioEngine.connect(playerNode, to: audioEngine.mainMixerNode, format: audioFormat16k)
+        audioEngine.attach(varispeed)
+        // Let the engine negotiate formats to avoid unsupported format errors (-10868)
+        audioEngine.connect(playerNode, to: varispeed, format: nil)
+        audioEngine.connect(varispeed, to: audioEngine.mainMixerNode, format: nil)
     }
 
     func start(sessionId: String, webSocketURL url: URL) {
@@ -284,14 +291,37 @@ final class AudioStreamingClient: NSObject, ObservableObject {
 
     // MARK: - Playback
     private func schedulePlayback(pcm16: Data) {
-        let frameCount = UInt32(pcm16.count / 2)
-        guard let buf = AVAudioPCMBuffer(pcmFormat: audioFormat16k, frameCapacity: frameCount) else { return }
-        buf.frameLength = frameCount
+        // Prepare source buffer (PCM16 mono @ 24k, non-interleaved)
+        let srcFrames = UInt32(pcm16.count / 2)
+        guard let srcBuf = AVAudioPCMBuffer(pcmFormat: sourcePCM16_24k, frameCapacity: srcFrames) else { return }
+        srcBuf.frameLength = srcFrames
         pcm16.withUnsafeBytes { raw in
-            guard let src = raw.baseAddress else { return }
-            memcpy(buf.int16ChannelData![0], src, pcm16.count)
+            guard let srcBase = raw.baseAddress else { return }
+            // Copy into channel 0 (non-interleaved)
+            memcpy(srcBuf.int16ChannelData![0], srcBase, pcm16.count)
         }
-        playerNode.scheduleBuffer(buf, completionHandler: nil)
+
+        // Determine destination (player node) format
+        let dstFormat = playerNode.outputFormat(forBus: 0)
+        let ratio = dstFormat.sampleRate / sourcePCM16_24k.sampleRate
+        let dstCapacity = AVAudioFrameCount(Double(srcBuf.frameLength) * ratio + 16)
+        guard let dstBuf = AVAudioPCMBuffer(pcmFormat: dstFormat, frameCapacity: dstCapacity) else { return }
+
+        guard let converter = AVAudioConverter(from: sourcePCM16_24k, to: dstFormat) else { return }
+        var error: NSError?
+        var consumedSrc = false
+        let inputBlock: AVAudioConverterInputBlock = { _, outStatus in
+            if consumedSrc {
+                outStatus.pointee = .noDataNow
+                return nil
+            }
+            outStatus.pointee = .haveData
+            consumedSrc = true
+            return srcBuf
+        }
+        let status = converter.convert(to: dstBuf, error: &error, withInputFrom: inputBlock)
+        guard status != .error, error == nil else { return }
+        playerNode.scheduleBuffer(dstBuf, completionHandler: nil)
     }
 
     // MARK: - Utils
