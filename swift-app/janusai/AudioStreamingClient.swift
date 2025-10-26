@@ -44,7 +44,8 @@ final class AudioStreamingClient: NSObject, ObservableObject {
         config.timeoutIntervalForRequest = 3600  // 1 hour timeout for streaming
         config.timeoutIntervalForResource = 3600
         urlSession = URLSession(configuration: config, delegate: self, delegateQueue: nil)
-        audioFormat24k = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 24_000, channels: 1, interleaved: true)
+        // Use standard non-interleaved Float32 format required by AVAudioUnitVarispeed and mixer
+        audioFormat24k = AVAudioFormat(standardFormatWithSampleRate: 24_000, channels: 1)
         audioEngine.attach(playerNode)
         audioEngine.attach(varispeed)
         audioEngine.connect(playerNode, to: varispeed, format: audioFormat24k)
@@ -136,9 +137,9 @@ final class AudioStreamingClient: NSObject, ObservableObject {
 
     // MARK: - Capture & Upload (Client → Server)
     private func startCapture() {
-        if tapInstalled { 
+        if tapInstalled {
             print("⚠️ Tap already installed, skipping")
-            return 
+            return
         }
         
         self.captureCount = 0
@@ -287,36 +288,19 @@ final class AudioStreamingClient: NSObject, ObservableObject {
 
     // MARK: - Playback
     private func schedulePlayback(pcm16: Data) {
-        let frameCount = UInt32(pcm16.count / 2)
-        guard let buf = AVAudioPCMBuffer(pcmFormat: audioFormat24k, frameCapacity: frameCount) else { return }
-        buf.frameLength = frameCount
+        // Convert incoming PCM16 mono @ 24k to Float32 non-interleaved for the engine
+        let frames = UInt32(pcm16.count / 2)
+        guard let buf = AVAudioPCMBuffer(pcmFormat: audioFormat24k, frameCapacity: frames) else { return }
+        buf.frameLength = frames
         pcm16.withUnsafeBytes { raw in
-            guard let srcBase = raw.baseAddress else { return }
-            // Copy into channel 0 (non-interleaved)
-            memcpy(srcBuf.int16ChannelData![0], srcBase, pcm16.count)
-        }
-
-        // Determine destination (player node) format
-        let dstFormat = playerNode.outputFormat(forBus: 0)
-        let ratio = dstFormat.sampleRate / sourcePCM16_24k.sampleRate
-        let dstCapacity = AVAudioFrameCount(Double(srcBuf.frameLength) * ratio + 16)
-        guard let dstBuf = AVAudioPCMBuffer(pcmFormat: dstFormat, frameCapacity: dstCapacity) else { return }
-
-        guard let converter = AVAudioConverter(from: sourcePCM16_24k, to: dstFormat) else { return }
-        var error: NSError?
-        var consumedSrc = false
-        let inputBlock: AVAudioConverterInputBlock = { _, outStatus in
-            if consumedSrc {
-                outStatus.pointee = .noDataNow
-                return nil
+            guard let srcI16 = raw.bindMemory(to: Int16.self).baseAddress,
+                  let dstF32 = buf.floatChannelData?[0] else { return }
+            let n = Int(frames)
+            for i in 0..<n {
+                dstF32[i] = Float(srcI16[i]) / 32768.0
             }
-            outStatus.pointee = .haveData
-            consumedSrc = true
-            return srcBuf
         }
-        let status = converter.convert(to: dstBuf, error: &error, withInputFrom: inputBlock)
-        guard status != .error, error == nil else { return }
-        playerNode.scheduleBuffer(dstBuf, completionHandler: nil)
+        playerNode.scheduleBuffer(buf, completionHandler: nil)
     }
 
     // MARK: - Utils
@@ -426,8 +410,8 @@ private extension AudioStreamingClient {
         session.requestRecordPermission { granted in
             print("🎤 Microphone permission: \(granted ? "GRANTED" : "DENIED")")
             if granted {
-                do { 
-                    try session.setActive(true) 
+                do {
+                    try session.setActive(true)
                     print("✅ Audio session activated")
                 } catch {
                     print("❌ Failed to activate audio session: \(error)")

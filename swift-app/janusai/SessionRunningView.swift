@@ -159,9 +159,7 @@ private extension SessionRunningView {
                     guard let player else { break }
                     do {
                         let settings = try await APIService.shared.getSettings()
-                        DispatchQueue.main.async {
-                            player.client.bindSettings(Just(settings).eraseToAnyPublisher())
-                        }
+                        DispatchQueue.main.async { player.apply(settings: settings) }
                     } catch {}
                     try? await Task.sleep(nanoseconds: 3_000_000_000) // 3s
                 }
