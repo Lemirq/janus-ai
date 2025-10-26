@@ -58,10 +58,10 @@ Provide analysis in JSON format:
 }}
 
 Focus on identifying:
-1. Questions that need answers
-2. Objections or concerns
-3. Buying signals or interest indicators
-4. Emotional state changes
+1. Questions that are critical to achieving the persuasive goal
+2. Objections or concerns, which may be obstacles to the persuasive goal
+3. Indicators of interest
+4. Changes in sentiment or emotional state
 5. Topics that relate to persuasion objectives"""
 
         try:
