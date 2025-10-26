@@ -528,6 +528,10 @@ Examples:
     parser.add_argument('-o', '--output', type=str, default='output/response.wav', help='Output file')
     parser.add_argument('--interactive', action='store_true', help='Interactive mode')
     
+    # Model selection
+    parser.add_argument('--use-api', action='store_true', 
+                       help='Use Boson API instead of fine-tuned models (for comparison)')
+    
     # Legacy demo mode arguments  
     parser.add_argument('--mode', choices=['demo', 'live'], help='[DEPRECATED] Use -i/-p instead')
     parser.add_argument('--output-dir', type=str, help='[DEPRECATED] Use -o instead')
@@ -552,8 +556,20 @@ Examples:
         enable_question_prediction=False
     )
     
+    # Show mode
+    if args.use_api:
+        print(f"\n[MODE] Using Boson API (fine-tuned models disabled)")
+    
     print(f"\n[INIT] Initializing Janus AI...")
     janus = JanusAI(config)
+    
+    # Disable fine-tuned models if --use-api flag is set
+    if args.use_api:
+        print(f"[API MODE] Forcing API usage (skipping fine-tuned models)")
+        janus.response_generator.local_model = None
+        janus.response_generator.local_tokenizer = None
+        janus.audio_generator.local_higgs_model = None
+        janus.audio_generator.local_higgs_tokenizer = None
     
     # Set objective based on talking points
     if args.input and args.points:
