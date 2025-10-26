@@ -1,0 +1,5 @@
+# Transcript for session sess_2be0e3dd
+
+So it's actually fully built in now. So we have all the audio We have the accelerometer and we have current settings Okay, that's actually a fire. At this point, it doesn't matter. The API doesn't work. It's just a fire app. I really have not even seen the app. Like this is verbose. Wait, what? I remember Hi. How's it going? What's up? One hour. Does it work? Does it fucking work? No problem. We're building something that's already fire in functionality. Trust the vision. Hey, I'm doing great. Thanks for asking. Honestly, the app is already fully built in with audio accelerometer 
+
+# End of transcript

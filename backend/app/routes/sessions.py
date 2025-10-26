@@ -61,6 +61,9 @@ def create_session():
         "status": "created",
     }
 
+    # Ensure the session file's parent directory exists
+    os.makedirs(os.path.dirname(_session_path(session_id)), exist_ok=True)
+
     # persist session file
     with open(_session_path(session_id), "w") as f:
         json.dump(sess, f)
