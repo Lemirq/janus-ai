@@ -100,7 +100,7 @@ YOUR KEY POINTS:
 
 INSTRUCTIONS:
 1. Answer the question directly
-2. Include your key points naturally
+2. Include key points of persuasion naturally in the flow of speech
 3. Be conversational and persuasive
 4. Keep answers to 2-3 sentences
 5. DO NOT include thinking, reasoning, or meta-commentary
