@@ -31,7 +31,7 @@ class SentimentAnalyzer:
             base_url=config.base_url
         )
         
-    async def analyze(self, transcript: str, history: List[Dict]) -> ConversationAnalysis:
+    async def analyze(self, transcript: str, history: List[Dict], language: str) -> ConversationAnalysis:
         """Analyze transcript for sentiment, questions, and conversation dynamics"""
         
         # Build context from history
@@ -89,6 +89,7 @@ Concentrez-vous sur l'identification de :
 4. Les changements de sentiment ou d'état émotionnel
 5. Les sujets qui se rapportent concrètement aux objectifs de persuasion
 """}
+        prompt = prompts_dict[language]
 
         try:
             response = await self.client.chat.completions.create(
