@@ -62,7 +62,7 @@ Focus on identifying:
 2. Objections or concerns, which may be obstacles to the persuasive goal
 3. Indicators of interest
 4. Changes in sentiment or emotional state
-5. Topics that relate to persuasion objectives"""
+5. Topics that relate concretely to persuasion objectives"""
 
         try:
             response = await self.client.chat.completions.create(
