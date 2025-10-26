@@ -17,6 +17,11 @@ struct ContentView: View {
                     Label("Sessions", systemImage: "text.magnifyingglass")
                 }
 
+            SensorView()
+                .tabItem {
+                    Label("Sensors", systemImage: "gyroscope")
+                }
+
             NavigationView { SettingsView() }
                 .tabItem {
                     Label("Settings", systemImage: "gear")

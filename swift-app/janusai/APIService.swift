@@ -11,7 +11,7 @@ final class APIService {
     static let shared = APIService()
 
     // Update for production environments as needed
-    private let baseURL = "http://100.67.82.198:2025/api"
+    private let baseURL = "http://100.67.87.112:2025/api"
 
     private let jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -205,5 +205,57 @@ extension APIService {
     
     func stopStreamURL(sessionId: String) -> URL? {
         return URL(string: "\(baseURL)/sessions/\(sessionId)/stop_stream")
+    }
+    
+    // MARK: - Settings
+    struct Settings: Codable {
+        let playbackSpeed: String
+        let speedMultiplier: Double
+        let verbose: Bool
+        let lastUpdated: String
+    }
+    
+    func getSettings() async throws -> Settings {
+        guard let url = URL(string: "\(baseURL)/settings") else { throw URLError(.badURL) }
+        print("[HTTP REQ][Swift] GET \(url.absoluteString)")
+        let (data, response) = try await URLSession.shared.data(from: url)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] GET \(url.absoluteString) status=\(http.statusCode) body=\(String(data: data, encoding: .utf8) ?? "<non-utf8>")")
+        }
+        return try jsonDecoder.decode(Settings.self, from: data)
+    }
+    
+    func updateSettings(playbackSpeed: String? = nil, verbose: Bool? = nil) async throws -> Settings {
+        guard let url = URL(string: "\(baseURL)/settings") else { throw URLError(.badURL) }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        var body: [String: Any] = [:]
+        if let playbackSpeed { body["playbackSpeed"] = playbackSpeed }
+        if let verbose { body["verbose"] = verbose }
+        
+        req.httpBody = try JSONSerialization.data(withJSONObject: body)
+        print("[HTTP REQ][Swift] POST \(url.absoluteString) body=\(String(data: req.httpBody ?? Data(), encoding: .utf8) ?? "<binary>")")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] POST \(url.absoluteString) status=\(http.statusCode) body=\(String(data: data, encoding: .utf8) ?? "<non-utf8>")")
+        }
+        return try jsonDecoder.decode(Settings.self, from: data)
+    }
+    
+    func repeatLastAudio(sessionId: String) async throws -> Data {
+        guard let url = URL(string: "\(baseURL)/sessions/\(sessionId)/repeat") else { throw URLError(.badURL) }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        print("[HTTP REQ][Swift] POST \(url.absoluteString)")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse {
+            print("[HTTP RES][Swift] POST \(url.absoluteString) status=\(http.statusCode) bytes=\(data.count)")
+            if http.statusCode != 200 {
+                throw URLError(.badServerResponse)
+            }
+        }
+        return data
     }
 }

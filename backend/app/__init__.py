@@ -12,6 +12,7 @@ def create_app() -> Flask:
     from .routes.voice import bp as voice_bp
     from .routes.sessions import bp as sessions_bp
     from .routes.stream_sessions import bp as stream_sessions_bp
+    from .routes.settings import bp as settings_bp
 
     app.register_blueprint(health_bp, url_prefix="/api")
     app.register_blueprint(ingest_bp, url_prefix="/api")
@@ -19,6 +20,7 @@ def create_app() -> Flask:
     app.register_blueprint(voice_bp, url_prefix="/api")
     app.register_blueprint(sessions_bp, url_prefix="/api")
     app.register_blueprint(stream_sessions_bp, url_prefix="/api")
+    app.register_blueprint(settings_bp, url_prefix="/api")
 
     # Verbose HTTP logging
     @app.before_request

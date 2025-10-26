@@ -38,6 +38,7 @@ struct SessionRunningView: View {
     @State private var isStopping = false
     @State private var status: String = ""
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var appState: AppState
 
     var body: some View {
         VStack(spacing: 16) {
@@ -87,6 +88,9 @@ private extension SessionRunningView {
         do {
             try await APIService.shared.startSession(id: sessionId)
             player.start(sessionId: sessionId)
+            await MainActor.run {
+                appState.startSession(sessionId)
+            }
             status = "Started"
         } catch {
             status = "Start failed: \(error.localizedDescription)"
@@ -100,9 +104,15 @@ private extension SessionRunningView {
         do {
             try await APIService.shared.stopSession(id: sessionId)
             player.stop()
+            await MainActor.run {
+                appState.stopSession()
+            }
             status = "Stopped"
         } catch {
             player.stop()
+            await MainActor.run {
+                appState.stopSession()
+            }
             status = "Stopped (API error): \(error.localizedDescription)"
         }
     }
@@ -114,6 +124,9 @@ private extension SessionRunningView {
         do {
             player.stop()
             try await APIService.shared.completeSession(id: sessionId)
+            await MainActor.run {
+                appState.completeSession()
+            }
             status = "Completed"
             dismiss()
         } catch {
