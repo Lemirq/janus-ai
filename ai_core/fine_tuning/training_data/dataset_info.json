@@ -1,0 +1,15 @@
+{
+  "num_examples": 98,
+  "total_duration": 402.8501828410687,
+  "avg_duration": 4.110716151439476,
+  "prosody_distribution": {
+    "<pitch_low>": 52,
+    "<pause_long>": 4,
+    "<pitch_high>": 60,
+    "<pitch_rising>": 32,
+    "<pitch_falling>": 50,
+    "<pause_short>": 17,
+    "<emph>": 15
+  },
+  "unique_prosody_types": 7
+}

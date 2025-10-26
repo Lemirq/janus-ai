@@ -1,0 +1,1114 @@
+[
+  {
+    "id": 1,
+    "text": "at random leaves on television <pitch_low> shows to recognize that it's a fake",
+    "prosody_text": "at random leaves on television <pitch_low> shows to recognize that it's a fake",
+    "audio_path": "training_data/segments/segment_001.wav",
+    "prosody_tokens": [
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439478
+  },
+  {
+    "id": 2,
+    "text": "not created by the wind <pause_long> <pitch_high> no i just you know you",
+    "prosody_text": "not created by the wind <pause_long> <pitch_high> no i just you know you",
+    "audio_path": "training_data/segments/segment_002.wav",
+    "prosody_tokens": [
+      "<pause_long>",
+      "<pitch_high>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 3,
+    "text": "created by the wind <pause_long> <pitch_high> no i just you know you look",
+    "prosody_text": "created by the wind <pause_long> <pitch_high> no i just you know you look",
+    "audio_path": "training_data/segments/segment_003.wav",
+    "prosody_tokens": [
+      "<pause_long>",
+      "<pitch_high>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 4,
+    "text": "look at scenes from walking <pitch_rising> dead and they enter this deserted <pitch_high>",
+    "prosody_text": "look at scenes from walking <pitch_rising> dead and they enter this deserted <pitch_high>",
+    "audio_path": "training_data/segments/segment_004.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 5,
+    "text": "town as so many towns <pitch_high> are when zombies take over and the",
+    "prosody_text": "town as so many towns <pitch_high> are when zombies take over and the",
+    "audio_path": "training_data/segments/segment_005.wav",
+    "prosody_tokens": [
+      "<pitch_high>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 6,
+    "text": "the the the <pitch_high> leaves <pitch_high> you <pitch_low> know the the <pitch_falling> autumn",
+    "prosody_text": "the the the <pitch_high> leaves <pitch_high> you <pitch_low> know the the <pitch_falling> autumn",
+    "audio_path": "training_data/segments/segment_006.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439478
+  },
+  {
+    "id": 7,
+    "text": "you <pitch_low> know the the <pitch_falling> autumn <pitch_high> leaves are evenly spread in",
+    "prosody_text": "you <pitch_low> know the the <pitch_falling> autumn <pitch_high> leaves are evenly spread in",
+    "audio_path": "training_data/segments/segment_007.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 8,
+    "text": "<pitch_falling> sidewalks and i'm thinking <pitch_high> some set designer <pitch_high> did <pitch_low> that",
+    "prosody_text": "<pitch_falling> sidewalks and i'm thinking <pitch_high> some set designer <pitch_high> did <pitch_low> that",
+    "audio_path": "training_data/segments/segment_008.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 9,
+    "text": "some set designer <pitch_high> did <pitch_low> that <pitch_falling> thinking <pitch_low> that <pitch_high> this",
+    "prosody_text": "some set designer <pitch_high> did <pitch_low> that <pitch_falling> thinking <pitch_low> that <pitch_high> this",
+    "audio_path": "training_data/segments/segment_009.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 10,
+    "text": "designer <pitch_high> did <pitch_low> that <pitch_falling> thinking <pitch_low> that <pitch_high> this is what",
+    "prosody_text": "designer <pitch_high> did <pitch_low> that <pitch_falling> thinking <pitch_low> that <pitch_high> this is what",
+    "audio_path": "training_data/segments/segment_010.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 11,
+    "text": "that <pitch_falling> thinking <pitch_low> that <pitch_high> this is what leaves <pitch_falling> do in",
+    "prosody_text": "that <pitch_falling> thinking <pitch_low> that <pitch_high> this is what leaves <pitch_falling> do in",
+    "audio_path": "training_data/segments/segment_011.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 12,
+    "text": "in the <pitch_high> breeze but <pitch_high> that's <pitch_high> not <pitch_low> what they do",
+    "prosody_text": "in the <pitch_high> breeze but <pitch_high> that's <pitch_high> not <pitch_low> what they do",
+    "audio_path": "training_data/segments/segment_012.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 13,
+    "text": "but <pitch_high> that's <pitch_high> not <pitch_low> what they do they <pitch_rising> collect they",
+    "prosody_text": "but <pitch_high> that's <pitch_high> not <pitch_low> what they do they <pitch_rising> collect they",
+    "audio_path": "training_data/segments/segment_013.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.11071615143948
+  },
+  {
+    "id": 14,
+    "text": "do they <pitch_rising> collect they <pitch_falling> circulate they're they're they're like <pitch_falling> eddies",
+    "prosody_text": "do they <pitch_rising> collect they <pitch_falling> circulate they're they're they're like <pitch_falling> eddies",
+    "audio_path": "training_data/segments/segment_014.wav",
+    "prosody_tokens": [
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.1107161514394726
+  },
+  {
+    "id": 15,
+    "text": "like <pitch_falling> eddies in the <pitch_high> air <pitch_low> currents that'll collect them in",
+    "prosody_text": "like <pitch_falling> eddies in the <pitch_high> air <pitch_low> currents that'll collect them in",
+    "audio_path": "training_data/segments/segment_015.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 16,
+    "text": "one place and not the <pitch_falling> other <pause_long> so so so <pitch_high> we",
+    "prosody_text": "one place and not the <pitch_falling> other <pause_long> so so so <pitch_high> we",
+    "audio_path": "training_data/segments/segment_016.wav",
+    "prosody_tokens": [
+      "<pause_long>",
+      "<pitch_high>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 17,
+    "text": "and not the <pitch_falling> other <pause_long> so so so <pitch_high> we <pitch_low> think",
+    "prosody_text": "and not the <pitch_falling> other <pause_long> so so so <pitch_high> we <pitch_low> think",
+    "audio_path": "training_data/segments/segment_017.wav",
+    "prosody_tokens": [
+      "<pause_long>",
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 18,
+    "text": "so so so <pitch_high> we <pitch_low> think if something's <pitch_falling> random that it's",
+    "prosody_text": "so so so <pitch_high> we <pitch_low> think if something's <pitch_falling> random that it's",
+    "audio_path": "training_data/segments/segment_018.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 19,
+    "text": "<pitch_falling> random that it's evenly <pitch_high> spread but in <pitch_high> fact there are",
+    "prosody_text": "<pitch_falling> random that it's evenly <pitch_high> spread but in <pitch_high> fact there are",
+    "audio_path": "training_data/segments/segment_019.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 20,
+    "text": "in <pitch_high> fact there are <pitch_high> many <pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling>",
+    "prosody_text": "in <pitch_high> fact there are <pitch_high> many <pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling>",
+    "audio_path": "training_data/segments/segment_020.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 21,
+    "text": "are <pitch_high> many <pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling> elements in something that's",
+    "prosody_text": "are <pitch_high> many <pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling> elements in something that's",
+    "audio_path": "training_data/segments/segment_021.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 22,
+    "text": "many <pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling> elements in something that's random than",
+    "prosody_text": "many <pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling> elements in something that's random than",
+    "audio_path": "training_data/segments/segment_022.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_low>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 23,
+    "text": "<pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling> elements in something that's random than we",
+    "prosody_text": "<pitch_low> more <pitch_rising> collected <pause_short> <pitch_falling> elements in something that's random than we",
+    "audio_path": "training_data/segments/segment_023.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_low>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 24,
+    "text": "we <pause_short> <pitch_high> typically think <pause_short> so i'm <pitch_high> looking at your new",
+    "prosody_text": "we <pause_short> <pitch_high> typically think <pause_short> so i'm <pitch_high> looking at your new",
+    "audio_path": "training_data/segments/segment_024.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_high>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 25,
+    "text": "typically think <pause_short> so i'm <pitch_high> looking at your new <pitch_high> ceiling here",
+    "prosody_text": "typically think <pause_short> so i'm <pitch_high> looking at your new <pitch_high> ceiling here",
+    "audio_path": "training_data/segments/segment_025.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_high>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 26,
+    "text": "<pitch_high> ceiling here in austin <pitch_high> texas and your <pitch_high> star is <pitch_falling>",
+    "prosody_text": "<pitch_high> ceiling here in austin <pitch_high> texas and your <pitch_high> star is <pitch_falling>",
+    "audio_path": "training_data/segments/segment_026.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 27,
+    "text": "nice digs you got here <pitch_high> thank <pitch_low> you but uh the stars",
+    "prosody_text": "nice digs you got here <pitch_high> thank <pitch_low> you but uh the stars",
+    "audio_path": "training_data/segments/segment_027.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 28,
+    "text": "you got here <pitch_high> thank <pitch_low> you but uh the stars are <pause_short>",
+    "prosody_text": "you got here <pitch_high> thank <pitch_low> you but uh the stars are <pause_short>",
+    "audio_path": "training_data/segments/segment_028.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 29,
+    "text": "<pitch_low> lights are <pitch_high> kind <pitch_low> of evenly spread on the <pitch_high> sky",
+    "prosody_text": "<pitch_low> lights are <pitch_high> kind <pitch_low> of evenly spread on the <pitch_high> sky",
+    "audio_path": "training_data/segments/segment_029.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 30,
+    "text": "of evenly spread on the <pitch_high> sky yeah they don't look <pitch_falling> real",
+    "prosody_text": "of evenly spread on the <pitch_high> sky yeah they don't look <pitch_falling> real",
+    "audio_path": "training_data/segments/segment_030.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 31,
+    "text": "sky yeah they don't look <pitch_falling> real <pitch_low> so <pitch_high> that's how and",
+    "prosody_text": "sky yeah they don't look <pitch_falling> real <pitch_low> so <pitch_high> that's how and",
+    "audio_path": "training_data/segments/segment_031.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 32,
+    "text": "so <pitch_high> that's how and <pitch_high> plus you know you <pitch_high> could have",
+    "prosody_text": "so <pitch_high> that's how and <pitch_high> plus you know you <pitch_high> could have",
+    "audio_path": "training_data/segments/segment_032.wav",
+    "prosody_tokens": [
+      "<pitch_high>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 33,
+    "text": "know you <pitch_high> could have <pitch_low> thrown at least a constellation up there",
+    "prosody_text": "know you <pitch_high> could have <pitch_low> thrown at least a constellation up there",
+    "audio_path": "training_data/segments/segment_033.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 34,
+    "text": "up there or something you <pitch_high> know what i should do i should",
+    "prosody_text": "up there or something you <pitch_high> know what i should do i should",
+    "audio_path": "training_data/segments/segment_034.wav",
+    "prosody_tokens": [
+      "<pitch_high>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 35,
+    "text": "should <pitch_high> get someone to <pitch_high> make me one and make one <pause_short>",
+    "prosody_text": "should <pitch_high> get someone to <pitch_high> make me one and make one <pause_short>",
+    "audio_path": "training_data/segments/segment_035.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_high>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 36,
+    "text": "me one and make one <pause_short> and just imitate the milky <pitch_low> way",
+    "prosody_text": "me one and make one <pause_short> and just imitate the milky <pitch_low> way",
+    "audio_path": "training_data/segments/segment_036.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 37,
+    "text": "<pitch_high> that'd be that'd be <pitch_high> beautiful right that'd be <pitch_high> beautiful and",
+    "prosody_text": "<pitch_high> that'd be that'd be <pitch_high> beautiful right that'd be <pitch_high> beautiful and",
+    "audio_path": "training_data/segments/segment_037.wav",
+    "prosody_tokens": [
+      "<pitch_high>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 38,
+    "text": "give me a call i'm <emph> all in i don't think i don't",
+    "prosody_text": "give me a call i'm <emph> all in i don't think i don't",
+    "audio_path": "training_data/segments/segment_038.wav",
+    "prosody_tokens": [
+      "<emph>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 39,
+    "text": "it could be a genuine <emph> issue so how you <pitch_high> doing <pitch_rising>",
+    "prosody_text": "it could be a genuine <emph> issue so how you <pitch_high> doing <pitch_rising>",
+    "audio_path": "training_data/segments/segment_039.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_high>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 40,
+    "text": "<emph> issue so how you <pitch_high> doing <pitch_rising> joe i'm doing <pitch_high> good",
+    "prosody_text": "<emph> issue so how you <pitch_high> doing <pitch_rising> joe i'm doing <pitch_high> good",
+    "audio_path": "training_data/segments/segment_040.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_high>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 41,
+    "text": "doing yeah i used to <pitch_falling> austin is an old <pause_short> [haunt <pitch_low>",
+    "prosody_text": "doing yeah i used to <pitch_falling> austin is an old <pause_short> [haunt <pitch_low>",
+    "audio_path": "training_data/segments/segment_041.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 42,
+    "text": "is an old <pause_short> [haunt <pitch_low> of <pitch_low> mine <pitch_low> is <pitch_high> it",
+    "prosody_text": "is an old <pause_short> [haunt <pitch_low> of <pitch_low> mine <pitch_low> is <pitch_high> it",
+    "audio_path": "training_data/segments/segment_042.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 43,
+    "text": "[haunt <pitch_low> of <pitch_low> mine <pitch_low> is <pitch_high> it yeah i met my",
+    "prosody_text": "[haunt <pitch_low> of <pitch_low> mine <pitch_low> is <pitch_high> it yeah i met my",
+    "audio_path": "training_data/segments/segment_043.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 44,
+    "text": "of <pitch_low> mine <pitch_low> is <pitch_high> it yeah i met my <emph> wife",
+    "prosody_text": "of <pitch_low> mine <pitch_low> is <pitch_high> it yeah i met my <emph> wife",
+    "audio_path": "training_data/segments/segment_044.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 45,
+    "text": "got my masters at ut <emph> austin my wife got her phd in",
+    "prosody_text": "got my masters at ut <emph> austin my wife got her phd in",
+    "audio_path": "training_data/segments/segment_045.wav",
+    "prosody_tokens": [
+      "<emph>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 46,
+    "text": "her phd in mathematical physics <pause_short> there and i <pitch_high> finished my phd",
+    "prosody_text": "her phd in mathematical physics <pause_short> there and i <pitch_high> finished my phd",
+    "audio_path": "training_data/segments/segment_046.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_high>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 47,
+    "text": "phd in columbia new york <pitch_rising> city but uh <pitch_high> we <pitch_low> spent",
+    "prosody_text": "phd in columbia new york <pitch_rising> city but uh <pitch_high> we <pitch_low> spent",
+    "audio_path": "training_data/segments/segment_047.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 48,
+    "text": "york <pitch_rising> city but uh <pitch_high> we <pitch_low> spent six years here <emph>",
+    "prosody_text": "york <pitch_rising> city but uh <pitch_high> we <pitch_low> spent six years here <emph>",
+    "audio_path": "training_data/segments/segment_048.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 49,
+    "text": "six years here <emph> long <emph> ago i love it here we were",
+    "prosody_text": "six years here <emph> long <emph> ago i love it here we were",
+    "audio_path": "training_data/segments/segment_049.wav",
+    "prosody_tokens": [
+      "<emph>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 50,
+    "text": "there was never more than <emph> one other car in front of you",
+    "prosody_text": "there was never more than <emph> one other car in front of you",
+    "audio_path": "training_data/segments/segment_050.wav",
+    "prosody_tokens": [
+      "<emph>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 51,
+    "text": "of you at a red <pitch_low> light just <pitch_falling> picture that a lot",
+    "prosody_text": "of you at a red <pitch_low> light just <pitch_falling> picture that a lot",
+    "audio_path": "training_data/segments/segment_051.wav",
+    "prosody_tokens": [
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 52,
+    "text": "a red <pitch_low> light just <pitch_falling> picture that a lot of folks remember",
+    "prosody_text": "a red <pitch_low> light just <pitch_falling> picture that a lot of folks remember",
+    "audio_path": "training_data/segments/segment_052.wav",
+    "prosody_tokens": [
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 53,
+    "text": "be <emph> totally <pitch_low> pissed <pitch_low> off the <emph> traffic here is still",
+    "prosody_text": "be <emph> totally <pitch_low> pissed <pitch_low> off the <emph> traffic here is still",
+    "audio_path": "training_data/segments/segment_053.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 54,
+    "text": "<pitch_low> pissed <pitch_low> off the <emph> traffic here is still adorable it's ridiculous",
+    "prosody_text": "<pitch_low> pissed <pitch_low> off the <emph> traffic here is still adorable it's ridiculous",
+    "audio_path": "training_data/segments/segment_054.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 55,
+    "text": "<emph> nice it's just a <pitch_rising> completely different <emph> vibe yeah so i",
+    "prosody_text": "<emph> nice it's just a <pitch_rising> completely different <emph> vibe yeah so i",
+    "audio_path": "training_data/segments/segment_055.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 56,
+    "text": "just a <pitch_rising> completely different <emph> vibe yeah so i miss you man",
+    "prosody_text": "just a <pitch_rising> completely different <emph> vibe yeah so i miss you man",
+    "audio_path": "training_data/segments/segment_056.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 57,
+    "text": "still at it i'm still <pitch_high> at <pitch_low> it i'm still doing the",
+    "prosody_text": "still at it i'm still <pitch_high> at <pitch_low> it i'm still doing the",
+    "audio_path": "training_data/segments/segment_057.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 58,
+    "text": "the thing and i thought <pause_short> you know i saw a few of",
+    "prosody_text": "the thing and i thought <pause_short> you know i saw a few of",
+    "audio_path": "training_data/segments/segment_058.wav",
+    "prosody_tokens": [
+      "<pause_short>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 59,
+    "text": "<pause_short> you know we can <pause_short> bring some some <pause_short> deep philosophical <pitch_low>",
+    "prosody_text": "<pause_short> you know we can <pause_short> bring some some <pause_short> deep philosophical <pitch_low>",
+    "audio_path": "training_data/segments/segment_059.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 60,
+    "text": "some some <pause_short> deep philosophical <pitch_low> thought <pitch_low> back because i know there's",
+    "prosody_text": "some some <pause_short> deep philosophical <pitch_low> thought <pitch_low> back because i know there's",
+    "audio_path": "training_data/segments/segment_060.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 61,
+    "text": "right uh <pitch_rising> occasionally no <pitch_low> it's <pitch_high> in <pitch_low> you <pitch_low> it's",
+    "prosody_text": "right uh <pitch_rising> occasionally no <pitch_low> it's <pitch_high> in <pitch_low> you <pitch_low> it's",
+    "audio_path": "training_data/segments/segment_061.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 62,
+    "text": "<pitch_rising> occasionally no <pitch_low> it's <pitch_high> in <pitch_low> you <pitch_low> it's <pitch_high> in",
+    "prosody_text": "<pitch_rising> occasionally no <pitch_low> it's <pitch_high> in <pitch_low> you <pitch_low> it's <pitch_high> in",
+    "audio_path": "training_data/segments/segment_062.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 63,
+    "text": "it's <pitch_high> in <pitch_low> you <pitch_low> it's <pitch_high> in <pitch_low> you when i'm",
+    "prosody_text": "it's <pitch_high> in <pitch_low> you <pitch_low> it's <pitch_high> in <pitch_low> you when i'm",
+    "audio_path": "training_data/segments/segment_063.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 64,
+    "text": "right people oh okay yeah <pitch_low> like <pitch_falling> you oh yeah <pitch_falling> yeah",
+    "prosody_text": "right people oh okay yeah <pitch_low> like <pitch_falling> you oh yeah <pitch_falling> yeah",
+    "audio_path": "training_data/segments/segment_064.wav",
+    "prosody_tokens": [
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 65,
+    "text": "like <pitch_falling> you oh yeah <pitch_falling> yeah it <pitch_low> comes <pitch_falling> out it",
+    "prosody_text": "like <pitch_falling> you oh yeah <pitch_falling> yeah it <pitch_low> comes <pitch_falling> out it",
+    "audio_path": "training_data/segments/segment_065.wav",
+    "prosody_tokens": [
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 66,
+    "text": "talk to you i've been <pitch_falling> wanting to talk to you what what",
+    "prosody_text": "talk to you i've been <pitch_falling> wanting to talk to you what what",
+    "audio_path": "training_data/segments/segment_066.wav",
+    "prosody_tokens": [
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 67,
+    "text": "that what are you doing <pitch_low> well <pitch_high> all these ufo <pitch_falling> disclosures",
+    "prosody_text": "that what are you doing <pitch_low> well <pitch_high> all these ufo <pitch_falling> disclosures",
+    "audio_path": "training_data/segments/segment_067.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 68,
+    "text": "are you doing <pitch_low> well <pitch_high> all these ufo <pitch_falling> disclosures <pitch_rising> yeah",
+    "prosody_text": "are you doing <pitch_low> well <pitch_high> all these ufo <pitch_falling> disclosures <pitch_rising> yeah",
+    "audio_path": "training_data/segments/segment_068.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 69,
+    "text": "all these ufo <pitch_falling> disclosures <pitch_rising> yeah those are you're like one of",
+    "prosody_text": "all these ufo <pitch_falling> disclosures <pitch_rising> yeah those are you're like one of",
+    "audio_path": "training_data/segments/segment_069.wav",
+    "prosody_tokens": [
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 70,
+    "text": "a skeptical <pitch_rising> inquisitive perspective <pitch_low> on these things you're not necessarily <pitch_rising>",
+    "prosody_text": "a skeptical <pitch_rising> inquisitive perspective <pitch_low> on these things you're not necessarily <pitch_rising>",
+    "audio_path": "training_data/segments/segment_070.wav",
+    "prosody_tokens": [
+      "<pitch_low>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 71,
+    "text": "these things you're not necessarily <pitch_rising> dismissive <pitch_falling> right but you're <pitch_high> not",
+    "prosody_text": "these things you're not necessarily <pitch_rising> dismissive <pitch_falling> right but you're <pitch_high> not",
+    "audio_path": "training_data/segments/segment_071.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 72,
+    "text": "you're not necessarily <pitch_rising> dismissive <pitch_falling> right but you're <pitch_high> not <pitch_falling> willing",
+    "prosody_text": "you're not necessarily <pitch_rising> dismissive <pitch_falling> right but you're <pitch_high> not <pitch_falling> willing",
+    "audio_path": "training_data/segments/segment_072.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 73,
+    "text": "dismissive <pitch_falling> right but you're <pitch_high> not <pitch_falling> willing to just adopt this",
+    "prosody_text": "dismissive <pitch_falling> right but you're <pitch_high> not <pitch_falling> willing to just adopt this",
+    "audio_path": "training_data/segments/segment_073.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 74,
+    "text": "we're being <emph> visited by <emph> ufos or from another planet <pitch_falling> yeah",
+    "prosody_text": "we're being <emph> visited by <emph> ufos or from another planet <pitch_falling> yeah",
+    "audio_path": "training_data/segments/segment_074.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 75,
+    "text": "ufos or from another planet <pitch_falling> yeah so it's <pause_short> um <pause_short> by",
+    "prosody_text": "ufos or from another planet <pitch_falling> yeah so it's <pause_short> um <pause_short> by",
+    "audio_path": "training_data/segments/segment_075.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 76,
+    "text": "planet <pitch_falling> yeah so it's <pause_short> um <pause_short> by the way let's start",
+    "prosody_text": "planet <pitch_falling> yeah so it's <pause_short> um <pause_short> by the way let's start",
+    "audio_path": "training_data/segments/segment_076.wav",
+    "prosody_tokens": [
+      "<pause_short>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 77,
+    "text": "they damn sure better look <pitch_falling> into it right we <pitch_high> give them",
+    "prosody_text": "they damn sure better look <pitch_falling> into it right we <pitch_high> give them",
+    "audio_path": "training_data/segments/segment_077.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 78,
+    "text": "<pitch_falling> into it right we <pitch_high> give them folks 700 billion <pitch_rising> dollars",
+    "prosody_text": "<pitch_falling> into it right we <pitch_high> give them folks 700 billion <pitch_rising> dollars",
+    "audio_path": "training_data/segments/segment_078.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 79,
+    "text": "give them folks 700 billion <pitch_rising> dollars make <pitch_high> some <pitch_falling> percentage of",
+    "prosody_text": "give them folks 700 billion <pitch_rising> dollars make <pitch_high> some <pitch_falling> percentage of",
+    "audio_path": "training_data/segments/segment_079.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 80,
+    "text": "some <pitch_falling> percentage of that <pitch_falling> budget to check out the <emph> possible",
+    "prosody_text": "some <pitch_falling> percentage of that <pitch_falling> budget to check out the <emph> possible",
+    "audio_path": "training_data/segments/segment_080.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 81,
+    "text": "don't <emph> understand <pitch_low> i <pitch_high> used to think that was a lot",
+    "prosody_text": "don't <emph> understand <pitch_low> i <pitch_high> used to think that was a lot",
+    "audio_path": "training_data/segments/segment_081.wav",
+    "prosody_tokens": [
+      "<emph>",
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 82,
+    "text": "dollars on the <pitch_rising> homeless <pitch_rising> every <pitch_rising> year the budget for the",
+    "prosody_text": "dollars on the <pitch_rising> homeless <pitch_rising> every <pitch_rising> year the budget for the",
+    "audio_path": "training_data/segments/segment_082.wav",
+    "prosody_tokens": [
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 83,
+    "text": "year the budget for the <pitch_rising> homeless they got a homeless budget okay",
+    "prosody_text": "year the budget for the <pitch_rising> homeless they got a homeless budget okay",
+    "audio_path": "training_data/segments/segment_083.wav",
+    "prosody_tokens": [
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 84,
+    "text": "i look at like the <pitch_falling> military getting 700 <pitch_rising> billion is that",
+    "prosody_text": "i look at like the <pitch_falling> military getting 700 <pitch_rising> billion is that",
+    "audio_path": "training_data/segments/segment_084.wav",
+    "prosody_tokens": [
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 85,
+    "text": "more <pitch_falling> money you know <pitch_falling> clearly they <pitch_low> need <pitch_low> more <pitch_falling>",
+    "prosody_text": "more <pitch_falling> money you know <pitch_falling> clearly they <pitch_low> need <pitch_low> more <pitch_falling>",
+    "audio_path": "training_data/segments/segment_085.wav",
+    "prosody_tokens": [
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 86,
+    "text": "you know <pitch_falling> clearly they <pitch_low> need <pitch_low> more <pitch_falling> money because if",
+    "prosody_text": "you know <pitch_falling> clearly they <pitch_low> need <pitch_low> more <pitch_falling> money because if",
+    "audio_path": "training_data/segments/segment_086.wav",
+    "prosody_tokens": [
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 87,
+    "text": "<pitch_falling> money because if you <pitch_high> can't <pitch_high> fix the la <pitch_rising> homeless",
+    "prosody_text": "<pitch_falling> money because if you <pitch_high> can't <pitch_high> fix the la <pitch_rising> homeless",
+    "audio_path": "training_data/segments/segment_087.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 88,
+    "text": "can't <pitch_high> fix the la <pitch_rising> homeless situation with 1 <pitch_rising> billion how",
+    "prosody_text": "can't <pitch_high> fix the la <pitch_rising> homeless situation with 1 <pitch_rising> billion how",
+    "audio_path": "training_data/segments/segment_088.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 89,
+    "text": "protect us with 700 billion <pitch_high> well <pitch_low> that's <pitch_low> not the same",
+    "prosody_text": "protect us with 700 billion <pitch_high> well <pitch_low> that's <pitch_low> not the same",
+    "audio_path": "training_data/segments/segment_089.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 90,
+    "text": "with 700 billion <pitch_high> well <pitch_low> that's <pitch_low> not the same <pitch_falling> agency",
+    "prosody_text": "with 700 billion <pitch_high> well <pitch_low> that's <pitch_low> not the same <pitch_falling> agency",
+    "audio_path": "training_data/segments/segment_090.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 91,
+    "text": "that's <pitch_low> not the same <pitch_falling> agency <pitch_high> charged <pitch_low> with <pitch_low> it",
+    "prosody_text": "that's <pitch_low> not the same <pitch_falling> agency <pitch_high> charged <pitch_low> with <pitch_low> it",
+    "audio_path": "training_data/segments/segment_091.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 92,
+    "text": "same <pitch_falling> agency <pitch_high> charged <pitch_low> with <pitch_low> it are they <pitch_rising> better",
+    "prosody_text": "same <pitch_falling> agency <pitch_high> charged <pitch_low> with <pitch_low> it are they <pitch_rising> better",
+    "audio_path": "training_data/segments/segment_092.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 93,
+    "text": "with <pitch_low> it are they <pitch_rising> better they're better than the homeless people",
+    "prosody_text": "with <pitch_low> it are they <pitch_rising> better they're better than the homeless people",
+    "audio_path": "training_data/segments/segment_093.wav",
+    "prosody_tokens": [
+      "<pitch_low>",
+      "<pitch_rising>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 94,
+    "text": "better than the homeless people <pitch_high> no <pitch_low> i'm <pitch_rising> saying the <pitch_falling>",
+    "prosody_text": "better than the homeless people <pitch_high> no <pitch_low> i'm <pitch_rising> saying the <pitch_falling>",
+    "audio_path": "training_data/segments/segment_094.wav",
+    "prosody_tokens": [
+      "<pitch_high>",
+      "<pitch_low>",
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 95,
+    "text": "<pitch_falling> mayor's office of los <pitch_falling> angeles sucks <pitch_falling> boston <pitch_rising> right yeah",
+    "prosody_text": "<pitch_falling> mayor's office of los <pitch_falling> angeles sucks <pitch_falling> boston <pitch_rising> right yeah",
+    "audio_path": "training_data/segments/segment_095.wav",
+    "prosody_tokens": [
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 96,
+    "text": "boston <pitch_rising> right yeah who's <pitch_falling> running <pitch_falling> what i got in <pitch_falling>",
+    "prosody_text": "boston <pitch_rising> right yeah who's <pitch_falling> running <pitch_falling> what i got in <pitch_falling>",
+    "audio_path": "training_data/segments/segment_096.wav",
+    "prosody_tokens": [
+      "<pitch_rising>",
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 97,
+    "text": "<pitch_falling> what i got in <pitch_falling> trouble this past <pitch_falling> february when the",
+    "prosody_text": "<pitch_falling> what i got in <pitch_falling> trouble this past <pitch_falling> february when the",
+    "audio_path": "training_data/segments/segment_097.wav",
+    "prosody_tokens": [
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  },
+  {
+    "id": 98,
+    "text": "past <pitch_falling> february when the <pitch_falling> electricity went out in <pitch_falling> texas and",
+    "prosody_text": "past <pitch_falling> february when the <pitch_falling> electricity went out in <pitch_falling> texas and",
+    "audio_path": "training_data/segments/segment_098.wav",
+    "prosody_tokens": [
+      "<pitch_falling>"
+    ],
+    "duration": 4.110716151439476
+  }
+]
