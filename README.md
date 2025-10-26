@@ -1,6 +1,6 @@
 # Janus AI
 
-![](https://raw.githubusercontent.com/Lemirq/janus-ai/master/janus.gif)
+![](https://raw.githubusercontent.com/Lemirq/janus-ai/master/ripple05696_the_god_Janus_reimagined_with_human_and_robot_fac_03098d87-20ef-4927-9ff2-f97e9075ad5a_0.gif)
 
 ## Overview
 
