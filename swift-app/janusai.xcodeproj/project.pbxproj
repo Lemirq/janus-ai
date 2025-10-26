@@ -10,9 +10,22 @@
 		579A9BC62EAC505800594794 /* janusai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = janusai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		575158682EADA36E00FB8E3B /* Exceptions for "janusai" folder in "janusai" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 579A9BC52EAC505800594794 /* janusai */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		579A9BC82EAC505800594794 /* janusai */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				575158682EADA36E00FB8E3B /* Exceptions for "janusai" folder in "janusai" target */,
+			);
 			path = janusai;
 			sourceTree = "<group>";
 		};
@@ -253,9 +266,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = AP4SRD5XAB;
+				DEVELOPMENT_TEAM = TGJMXSQ3Q9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = janusai/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Voice Sample needed";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -266,7 +281,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.vihaan.janusai;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vishal.janusai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -285,9 +300,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = AP4SRD5XAB;
+				DEVELOPMENT_TEAM = TGJMXSQ3Q9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = janusai/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Voice Sample needed";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -298,7 +315,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.vihaan.janusai;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vishal.janusai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;

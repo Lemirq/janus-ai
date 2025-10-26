@@ -3,12 +3,15 @@ name = "janus-backend"
 version = "0.1.0"
 description = "Minimal Flask + ChromaDB backend"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 dependencies = [
   "flask",
   "flask-cors",
+  "simpleaudio",
   "chromadb",
   "sentence-transformers",
+  "pydub>=0.25.1",
+  "audioop-lts",
 ]
 
 [build-system]

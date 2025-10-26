@@ -1,4 +1,7 @@
 /hackathon-msac-public/
+
+.DS_Store
+backend/uploads/
 /venv/
 /ai_core/.venv/
 /ai_core/core/__pycache__/

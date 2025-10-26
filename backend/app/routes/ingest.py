@@ -11,6 +11,7 @@ def ingest():
     payload = request.get_json(force=True, silent=True) or {}
     items = payload.get("documents", [])
     collection_name = payload.get("collection")
+    session_id = payload.get("sessionId")
     col = get_collection(collection_name) if collection_name else get_collection()
 
     texts, ids, metadatas = [], [], []
@@ -18,11 +19,16 @@ def ingest():
         if isinstance(item, str):
             texts.append(item)
             ids.append(str(uuid.uuid4()))
-            metadatas.append(None)
+            meta = {"source": "upload"}
+            if session_id:
+                meta["sessionId"] = session_id
+            metadatas.append(meta)
         elif isinstance(item, dict):
             texts.append(item.get("text", ""))
             ids.append(item.get("id") or str(uuid.uuid4()))
-            meta = item.get("metadata")
+            meta = item.get("metadata") or {}
+            if session_id:
+                meta.setdefault("sessionId", session_id)
             metadatas.append(meta if meta else None)
     if not texts:
         return jsonify({"added": 0}), 200
@@ -32,6 +38,6 @@ def ingest():
         col.add(documents=texts, ids=ids, metadatas=metadatas)
     else:
         col.add(documents=texts, ids=ids)
-    return jsonify({"added": len(texts)})
+    return jsonify({"added": len(texts), "ids": ids})
 
 
