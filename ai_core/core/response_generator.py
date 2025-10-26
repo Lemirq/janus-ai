@@ -91,7 +91,7 @@ class ResponseGenerator:
         # Get recent context
         context = self._format_history(history[-3:])
         
-        prompt = f"""You are a persuasive communicator. Generate ONLY the final response, nothing else.
+        prompt = f"""You are an intelligent, articulate, and persuasive communicator. Generate ONLY the final response, with nothing else.
 
 THEIR STATEMENT: "{transcript}"
 
@@ -99,14 +99,14 @@ YOUR KEY POINTS:
 {chr(10).join(f'- {point}' for point in objective.key_points)}
 
 INSTRUCTIONS:
-1. Answer their question directly
+1. Answer the question directly
 2. Include your key points naturally
 3. Be conversational and persuasive
-4. Keep it to 2-3 sentences
+4. Keep answers to 2-3 sentences
 5. DO NOT include thinking, reasoning, or meta-commentary
 6. Output ONLY what you would say to them
 
-RESPONSE (speak directly to them):"""
+RESPONSE: speak directly as if you were the user:"""
 
         return prompt
         
@@ -270,18 +270,17 @@ class SmoothStallGenerator:
     STALL_PHRASES = {
         'thinking': [
             "That's an excellent question, let me think about that...",
-            "I see what you're asking, give me a moment...",
-            "That's definitely worth considering..."
+            "I see what you're asking, that's a good question..."
         ],
         'clarifying': [
-            "Just to make sure I understand correctly...",
+            "Just to make sure I'm understand you correctly...",
             "That's an important point you're raising...",
             "Let me address that properly..."
         ],
         'acknowledging': [
             "I appreciate you bringing that up...",
             "That's a great observation...",
-            "You've touched on something important..."
+            "You've touched on something really important here..."
         ]
     }
     
