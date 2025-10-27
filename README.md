@@ -10,7 +10,7 @@
 
 ## Overview
 
-Say goodbye to prompt engineering.
+Say goodbye to prompt engineering. Say hello to Janus. 
 
 Janus is the union of AI and Human, a double-headed intelligent being with effortless access to the vast body of digital knowledge. Janus is a voice assitant that follows conversations in depth, doing research in real-time and providing relevant information on the fly. For the user, the experience is simple and intuitive: simply talk as normal, and Janus becomes a second brain, controlled by subtle gesture cues that fit with the natural flow of speech. From the second-person perspective, Janus is seamless: no explicit voice commands. No text prompts or chat interface. It communicates with users via a bluetooth earpiece, monitoring and transcribing conversations in real time, and deciding what kind of insight is helpful at a given moment. We've also built Janus to excel in high-stakes scenarios like business pitches, sales calls, and legal settings. Users can define specific objectives in advance, and Janus will target persuasive techniques toward that particular audience to achieve the user's goal.
 
